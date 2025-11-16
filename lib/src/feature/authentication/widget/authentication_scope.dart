@@ -1,7 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_project/src/feature/authentication/controller/authentication_controller.dart';
-import 'package:flutter_project/src/feature/authentication/controller/authentication_state.dart';
-import 'package:flutter_project/src/feature/authentication/model/sign_in_data.dart';
 import 'package:flutter_project/src/feature/authentication/model/user.dart';
 import 'package:flutter_project/src/feature/initialization/models/dependencies.dart';
 
@@ -16,20 +14,12 @@ class AuthenticationScope extends StatefulWidget {
   final Widget child;
 
   /// Get the current [User]
-  static User userOf(BuildContext context, {bool listen = true}) =>
+  static User? userOf(BuildContext context, {bool listen = true}) =>
       _InheritedAuthenticationScope.of(context, listen: listen).state.user;
 
   /// Get the current [AuthenticationController]
   static AuthenticationController controllerOf(BuildContext context) =>
       _InheritedAuthenticationScope.of(context, listen: false);
-
-  /// Sign-In
-  static void signIn(BuildContext context, SignInData data) =>
-      _InheritedAuthenticationScope.of(context, listen: false).signIn(data);
-
-  /// Sign-Out
-  static void signOut(BuildContext context) =>
-      _InheritedAuthenticationScope.of(context, listen: false).signOut();
 
   @override
   State<AuthenticationScope> createState() => _AuthenticationScopeState();

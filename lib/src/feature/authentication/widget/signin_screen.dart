@@ -1,13 +1,10 @@
 import 'dart:math' as math;
-
 import 'package:control/control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_project/src/common/constant/config.dart';
 import 'package:flutter_project/src/common/router/routes.dart';
 import 'package:flutter_project/src/feature/authentication/controller/authentication_controller.dart';
-import 'package:flutter_project/src/feature/authentication/controller/authentication_state.dart';
-import 'package:flutter_project/src/feature/authentication/model/sign_in_data.dart';
 import 'package:flutter_project/src/feature/authentication/widget/authentication_scope.dart';
 import 'package:octopus/octopus.dart';
 
@@ -76,7 +73,7 @@ class _SignInScreenState extends State<SignInScreen> with _UsernamePasswordFormS
                             padding: EdgeInsets.zero,
                             constraints: const BoxConstraints.tightFor(width: 48, height: 48),
                             tooltip: 'Generate password',
-                            onPressed: state.isIdling
+                            onPressed: state is Authentication$IdleState
                                 ? () {
                                     if (_obscurePassword) {
                                       setState(() => _obscurePassword = false);
@@ -92,7 +89,7 @@ class _SignInScreenState extends State<SignInScreen> with _UsernamePasswordFormS
                   const SizedBox(height: 32),
                   TextField(
                     focusNode: _usernameFocusNode,
-                    enabled: state.isIdling,
+                    enabled: state is Authentication$IdleState,
                     maxLines: 1,
                     minLines: 1,
                     controller: _usernameController,
@@ -113,7 +110,7 @@ class _SignInScreenState extends State<SignInScreen> with _UsernamePasswordFormS
                   const SizedBox(height: 8),
                   TextField(
                     focusNode: _passwordFocusNode,
-                    enabled: state.isIdling,
+                    enabled: state is Authentication$IdleState,
                     maxLines: 1,
                     minLines: 1,
                     controller: _passwordController,
@@ -145,10 +142,12 @@ class _SignInScreenState extends State<SignInScreen> with _UsernamePasswordFormS
                         final formFilled =
                             _usernameController.text.length > 3 &&
                             _passwordController.text.length >= Config.passwordMinLength;
-                        final signInCallback = state.isIdling && formFilled
+                        final signInCallback = state is Authentication$IdleState && formFilled
                             ? () => signIn(context)
                             : null;
-                        final signUpCallback = state.isIdling ? () => signUp(context) : null;
+                        final signUpCallback = state is Authentication$IdleState
+                            ? () => signUp(context)
+                            : null;
                         final key = ValueKey<int>(
                           (signInCallback == null ? 0 : 1 << 1) | (signUpCallback == null ? 0 : 1),
                         );
@@ -204,6 +203,7 @@ class _SignInScreen$Buttons extends StatelessWidget {
 
 class _UsernameTextFormatter extends TextInputFormatter {
   const _UsernameTextFormatter();
+
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) =>
       TextEditingValue(text: newValue.text.toLowerCase(), selection: newValue.selection);
@@ -268,7 +268,6 @@ mixin _UsernamePasswordFormStateMixin on State<SignInScreen> {
     final password = _passwordController.text;
     if (!_validate(username, password)) return;
     FocusScope.of(context).unfocus();
-    _authenticationController.signIn(SignInData(username: username, password: password));
   }
 
   /// Generates a random password

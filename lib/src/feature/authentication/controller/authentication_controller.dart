@@ -1,98 +1,48 @@
-import 'dart:async';
-
 import 'package:control/control.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_project/src/feature/authentication/controller/authentication_state.dart';
 import 'package:flutter_project/src/feature/authentication/data/authentication_repository.dart';
-import 'package:flutter_project/src/feature/authentication/model/sign_in_data.dart';
 import 'package:flutter_project/src/feature/authentication/model/user.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'authentication_controller.freezed.dart';
+
+@freezed
+sealed class AuthenticationState with _$AuthenticationState {
+  const AuthenticationState._();
+
+  const factory AuthenticationState.idle() = Authentication$IdleState;
+
+  const factory AuthenticationState.inProgress() = Authentication$InProgressState;
+
+  const factory AuthenticationState.error(final String? error) = Authentication$ErrorState;
+
+  const factory AuthenticationState.authenticated(final User user) =
+      Authentication$AuthenticatedState;
+
+  String? get error => switch (this) {
+    final Authentication$ErrorState state => state.error,
+    _ => null,
+  };
+
+  User? get user => switch (this) {
+    final Authentication$AuthenticatedState state => state.user,
+    _ => null,
+  };
+}
 
 final class AuthenticationController extends StateController<AuthenticationState>
     with DroppableControllerHandler {
   AuthenticationController({
     required this.repository,
-    super.initialState = const AuthenticationState.idle(user: User.unauthenticated()),
-  }) {
-    userSubscription = repository
-        .userChanges()
-        .where((user) => !identical(user, state.user))
-        .map<AuthenticationState>((u) => AuthenticationState.idle(user: u))
-        .listen(setState, cancelOnError: false);
-  }
+    super.initialState = const AuthenticationState.idle(),
+  });
 
   final IAuthenticationRepository repository;
-  StreamSubscription<AuthenticationState>? userSubscription;
 
-  /// Restore the session from the cache.
-  void restore() => handle(
-    () async {
-      setState(AuthenticationState.processing(user: state.user, message: 'Restoring session...'));
-      final user = await repository.restore();
-      setState(AuthenticationState.idle(user: user ?? const User.unauthenticated()));
-    },
-    error: (error, _) async {
-      setState(
-        AuthenticationState.idle(
-          user: state.user,
-          // ErrorUtil.formatMessage(error)
-          error: kDebugMode ? 'Restore Error: $error' : 'Restore Error',
-        ),
-      );
-    },
-  );
+  void signIn() => handle(() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(AuthenticationState.authenticated(User.defaultUser()));
+  });
 
-  /// Sign in with the given [data].
-  void signIn(SignInData data) => handle(
-    () async {
-      if (state.user.isAuthenticated) {
-        AuthenticationState.processing(user: state.user, message: 'Logging out...');
-        await repository.signOut().onError((_, __) {
-          /* Ignore */
-        });
-        const AuthenticationState.processing(
-          user: User.unauthenticated(),
-          message: 'Successfully logged out.',
-        );
-      }
-      setState(AuthenticationState.processing(user: state.user, message: 'Logging in...'));
-      final user = await repository.signIn(data);
-      setState(AuthenticationState.idle(user: user, message: 'Successfully logged in.'));
-    },
-    error: (error, _) async {
-      setState(
-        AuthenticationState.idle(
-          user: state.user,
-          // ErrorUtil.formatMessage(error)
-          error: kDebugMode ? 'Sign In Error: $error' : 'Sign In Error',
-        ),
-      );
-    },
-  );
-
-  /// Sign out.
-  void signOut() {
-    handle(
-      () async {
-        //if (state.user.isNotAuthenticated) return; // Already signed out.
-        setState(AuthenticationState.processing(user: state.user, message: 'Logging out...'));
-        await repository.signOut();
-        setState(const AuthenticationState.idle(user: User.unauthenticated()));
-      },
-      error: (error, _) async {
-        setState(
-          AuthenticationState.idle(
-            user: const User.unauthenticated(),
-            // ErrorUtil.formatMessage(error)
-            error: kDebugMode ? 'Log Out Error: $error' : 'Log Out Error',
-          ),
-        );
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    userSubscription?.cancel();
-    super.dispose();
-  }
+  void logout() => handle(() async {});
 }

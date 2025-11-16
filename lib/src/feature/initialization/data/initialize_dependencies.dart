@@ -64,7 +64,7 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
     deviceVersion: platform.version,
     deviceScreenSize: ScreenUtil.screenSize().representation,
   ),
-  'Observer state managment': (_) => Controller.observer = const ControllerObserver(),
+  'Observer state management': (_) => Controller.observer = const ControllerObserver(),
   'Initializing analytics': (_) {},
   'Log app open': (_) {},
   'Get remote config': (_) {},
@@ -74,27 +74,27 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
   'Connect to database': (dependencies) => dependencies.database = Config.inMemoryDatabase
       ? AppDatabase.defaults(name: 'memory')
       : AppDatabase.defaults(name: 'app_database'),
-  'Shrink database': (dependencies) async {
-    await dependencies.database.customStatement('VACUUM;');
-    await dependencies.database.transaction(() async {
-      final log =
-          await (dependencies.database.select<LogTbl, Log>(dependencies.database.logTbl)
-                ..orderBy([
-                  (tbl) => drift.OrderingTerm(
-                    expression: tbl.id as drift.Expression<Object>,
-                    mode: drift.OrderingMode.desc,
-                  ),
-                ])
-                ..limit(1, offset: 1000))
-              .getSingleOrNull();
-      if (log != null) {
-        await (dependencies.database.delete(
-          dependencies.database.logTbl,
-        )..where((tbl) => tbl.time.isSmallerOrEqualValue(log.time))).go();
-      }
-    });
-    if (DateTime.now().second % 10 == 0) await dependencies.database.customStatement('VACUUM;');
-  },
+  // 'Shrink database': (dependencies) async {
+  //   await dependencies.database.customStatement('VACUUM;');
+  //   await dependencies.database.transaction(() async {
+  //     final log =
+  //         await (dependencies.database.select<LogTbl, Log>(dependencies.database.logTbl)
+  //               ..orderBy([
+  //                 (tbl) => drift.OrderingTerm(
+  //                   expression: tbl.id as drift.Expression<Object>,
+  //                   mode: drift.OrderingMode.desc,
+  //                 ),
+  //               ])
+  //               ..limit(1, offset: 1000))
+  //             .getSingleOrNull();
+  //     if (log != null) {
+  //       await (dependencies.database.delete(
+  //         dependencies.database.logTbl,
+  //       )..where((tbl) => tbl.time.isSmallerOrEqualValue(log.time))).go();
+  //     }
+  //   });
+  //   if (DateTime.now().second % 10 == 0) await dependencies.database.customStatement('VACUUM;');
+  // },
   'API Client': (dependencies) => dependencies.apiClient = ApiClient(
     baseUrl: Config.apiBaseUrl,
     middlewares: [
@@ -111,7 +111,6 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
       dependencies.authenticationController = AuthenticationController(
         repository: AuthenticationRepositoryImpl(sharedPreferences: dependencies.sharedPreferences),
       ),
-  'Restore last user': (dependencies) => dependencies.authenticationController.restore(),
   'Initialize localization': (_) {},
   'Collect logs': (dependencies) async {
     await (dependencies.database.select<LogTbl, Log>(dependencies.database.logTbl)

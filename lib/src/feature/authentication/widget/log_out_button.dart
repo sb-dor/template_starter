@@ -49,7 +49,7 @@ class LogOutButton extends StatelessWidget {
               icon: const Icon(Icons.logout),
               label: Text(Localization.of(context).logOutButton),
               onPressed: () {
-                AuthenticationScope.signOut(context);
+                AuthenticationScope.controllerOf(context).logout();
                 HapticFeedback.mediumImpact().ignore();
               },
             ),
