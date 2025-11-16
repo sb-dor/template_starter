@@ -3,6 +3,8 @@ import 'package:control/control.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_project/src/common/constant/config.dart';
+import 'package:flutter_project/src/common/localization/generated/app_localizations.dart';
+import 'package:flutter_project/src/common/localization/localization.dart';
 import 'package:flutter_project/src/common/router/routes.dart';
 import 'package:flutter_project/src/feature/authentication/controller/authentication_controller.dart';
 import 'package:flutter_project/src/feature/authentication/widget/authentication_scope.dart';
@@ -59,7 +61,7 @@ class _SignInScreenState extends State<SignInScreen> with _UsernamePasswordFormS
                       children: <Widget>[
                         const SizedBox(width: 50),
                         Text(
-                          'Sign-In',
+                          Localization.of(context).signInButton,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.center,

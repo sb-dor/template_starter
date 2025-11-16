@@ -45,6 +45,8 @@ final class ControllerObserver implements IControllerObserver {
     }
   }
 
+  /// error should not be propagated from this [observer] to the outside
+  /// So the [ErrorUtil] logs the error and sends to the Crashlytics/Sentry directly from this [observer]
   @override
   void onError(Controller controller, Object error, StackTrace stackTrace) {
     final context = Controller.context;

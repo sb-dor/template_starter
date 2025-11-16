@@ -37,6 +37,7 @@ class _AppState extends State<App> with RouterStateMixin {
       Localization.delegate,
     ],
     supportedLocales: Localization.supportedLocales,
+    // locale: const Locale("en"),
     /* locale: SettingsScope.localOf(context), */
 
     // Theme

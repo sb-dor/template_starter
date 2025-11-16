@@ -40,10 +40,6 @@ abstract final class Config {
 
   // --- DATABASE --- //
 
-  /// Whether to drop database on start.
-  /// e.g. true
-  static const bool dropDatabase = bool.fromEnvironment('DROP_DATABASE', defaultValue: false);
-
   /// Database file name by default.
   /// e.g. sqlite means "sqlite.db" for native platforms and "sqlite" for web platform.
   static const String databaseName = String.fromEnvironment(
@@ -74,20 +70,6 @@ abstract final class Config {
     'MAX_LAYOUT_WIDTH',
     defaultValue: 768,
   );
-
-  // --- Key storage namespace --- //
-
-  /// Namespace for all version keys
-  static const String storageNamespace = 'keys';
-
-  /// Keys for storing the current version of the app
-  static const String versionMajorKey = '$storageNamespace.version.major';
-
-  /// Keys for storing the current version of the app
-  static const String versionMinorKey = '$storageNamespace.version.minor';
-
-  /// Keys for storing the current version of the app
-  static const String versionPatchKey = '$storageNamespace.version.patch';
 }
 
 /// Environment flavor.
@@ -95,11 +77,6 @@ abstract final class Config {
 enum EnvironmentFlavor {
   /// Development
   development('development'),
-
-  /// Staging
-  staging('staging'),
-
-  /// Production
   production('production');
 
   /// Create environment flavor.
@@ -108,7 +85,6 @@ enum EnvironmentFlavor {
   /// Create environment flavor from string.
   factory EnvironmentFlavor.from(String? value) => switch (value?.trim().toLowerCase()) {
     'development' || 'debug' || 'develop' || 'dev' => development,
-    'staging' || 'profile' || 'stage' || 'stg' => staging,
     'production' || 'release' || 'prod' || 'prd' => production,
     _ => const bool.fromEnvironment('dart.vm.product') ? production : development,
   };
@@ -118,9 +94,6 @@ enum EnvironmentFlavor {
 
   /// Whether the environment is development.
   bool get isDevelopment => this == development;
-
-  /// Whether the environment is staging.
-  bool get isStaging => this == staging;
 
   /// Whether the environment is production.
   bool get isProduction => this == production;

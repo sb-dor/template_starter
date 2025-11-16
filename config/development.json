@@ -1,5 +1,6 @@
 {
   "ENVIRONMENT": "development",
   "API_BASE_URL": "",
+  "DATABASE_NAME": "app_database",
   "MAX_LAYOUT_WIDTH": 768
 }

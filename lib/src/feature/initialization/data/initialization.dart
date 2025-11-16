@@ -67,7 +67,7 @@ Future<void> _catchExceptions() async {
     final sourceFlutterError = FlutterError.onError;
     FlutterError.onError = (final details) {
       ErrorUtil.logError(
-        "Flitytter: ${details.exception}",
+        details.exception,
         details.stack ?? StackTrace.current,
         hint: 'FLUTTER ERROR\r\n$details',
       ).ignore();

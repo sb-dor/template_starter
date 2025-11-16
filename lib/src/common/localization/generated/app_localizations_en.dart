@@ -117,8 +117,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get unknownServerError => 'Unknown server error';
 
   @override
-  String get anUnknownErrorWasReceivedFromTheServer =>
-      'An unknown error was received from the server';
+  String get anUnknownErrorWasReceivedFromTheServer => 'An unknown error was received from the server';
 
   @override
   String get logOutButton => 'Log Out';
