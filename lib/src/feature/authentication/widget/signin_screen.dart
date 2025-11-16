@@ -268,6 +268,7 @@ mixin _UsernamePasswordFormStateMixin on State<SignInScreen> {
     final password = _passwordController.text;
     if (!_validate(username, password)) return;
     FocusScope.of(context).unfocus();
+    AuthenticationScope.controllerOf(context).signIn();
   }
 
   /// Generates a random password

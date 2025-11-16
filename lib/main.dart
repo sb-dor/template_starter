@@ -18,6 +18,8 @@ void main() => appZone(() async {
     message: '',
   ));
   // runApp(InitializationSplashScreen(progress: initializationProgress));
+  // to lazily load library:
+  // checkout: https://dart.dev/language/libraries#lazily-loading-a-library
   await initialization.loadLibrary();
   initialization
       .$initializeApp(
@@ -34,6 +36,8 @@ void main() => appZone(() async {
           ),
         ),
         onError: (error, stackTrace) async {
+          // to lazily load library:
+          // checkout: https://dart.dev/language/libraries#lazily-loading-a-library
           await app_error.loadLibrary();
           runApp(app_error.AppError(error: error));
           ErrorUtil.logError(error, stackTrace).ignore();

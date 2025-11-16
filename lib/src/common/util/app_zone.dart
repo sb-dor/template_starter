@@ -1,15 +1,16 @@
 import 'dart:async';
 
+import 'package:flutter_project/src/common/util/error_util.dart';
 import 'package:l/l.dart';
 import 'package:platform_info/platform_info.dart';
 
 /// Catch all application errors and logs.
 void appZone(Future<void> Function() fn) => l.capture<void>(
-  () => runZonedGuarded<void>(() => fn(), l.e),
+  () => runZonedGuarded<void>(() => fn(), ErrorUtil.logError),
   LogOptions(
     messageFormatting: _messageFormatting,
     handlePrint: true,
-    outputInRelease: false,
+    outputInRelease: false, //? do not set true, we do not have to see
     printColors: !platform.iOS, //? Remove when iOS will supports ANSI colors in console.
   ),
 );

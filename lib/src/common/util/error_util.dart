@@ -20,6 +20,7 @@ abstract final class ErrorUtil {
       if (exception is String) {
         return await logMessage(exception, stackTrace: stackTrace, hint: hint, warning: true);
       }
+      // captureException sends your exception to Crashlytics/Sentry
       $captureException(exception, stackTrace, hint, fatal).ignore();
       l.e(exception, stackTrace);
     } on Object catch (error, stackTrace) {

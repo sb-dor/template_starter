@@ -78,6 +78,7 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
   'API Client': (dependencies) => dependencies.apiClient = ApiClient(
     baseUrl: Config.apiBaseUrl,
     middlewares: [
+      //
       const ApiClient$LoggerMiddleware(logRequest: false, logResponse: true, logError: true).call,
       // dedupe interceptor
       // authentification interceptor
