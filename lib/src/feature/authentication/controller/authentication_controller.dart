@@ -6,6 +6,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'authentication_controller.freezed.dart';
 
+/// for more information to change the controller's handler checkout this github page:
+/// https://github.com/PlugFox/control/tree/master/lib/src/concurrency
+
 @freezed
 sealed class AuthenticationState with _$AuthenticationState {
   const AuthenticationState._();
