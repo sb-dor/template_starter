@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 /* import 'package:database/database.dart'; */
-import 'package:flutter_template_name/src/common/model/dependencies.dart';
+import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:flutter_template_name/src/common/util/error_util.dart';
 import 'package:flutter_template_name/src/feature/initialization/data/initialize_dependencies.dart';
 
@@ -15,34 +15,33 @@ Future<Dependencies> $initializeApp({
   void Function(int progress, String message)? onProgress,
   Future<void> Function(Dependencies dependencies)? onSuccess,
   void Function(Object error, StackTrace stackTrace)? onError,
-}) =>
-    _$initializeApp ??= Future<Dependencies>(() async {
-      late final WidgetsBinding binding;
-      final stopwatch = Stopwatch()..start();
-      try {
-        binding = WidgetsFlutterBinding.ensureInitialized()..deferFirstFrame();
-        /* await SystemChrome.setPreferredOrientations([
+}) => _$initializeApp ??= Future<Dependencies>(() async {
+  late final WidgetsBinding binding;
+  final stopwatch = Stopwatch()..start();
+  try {
+    binding = WidgetsFlutterBinding.ensureInitialized()..deferFirstFrame();
+    /* await SystemChrome.setPreferredOrientations([
             DeviceOrientation.portraitUp,
             DeviceOrientation.portraitDown,
           ]); */
-        await _catchExceptions();
-        final dependencies = await $initializeDependencies(onProgress: onProgress).timeout(const Duration(minutes: 7));
-        await onSuccess?.call(dependencies);
-        return dependencies;
-      } on Object catch (error, stackTrace) {
-        onError?.call(error, stackTrace);
-        ErrorUtil.logError(error, stackTrace, hint: 'Failed to initialize app').ignore();
-        rethrow;
-      } finally {
-        stopwatch.stop();
-        binding.addPostFrameCallback((_) {
-          // Closes splash screen, and show the app layout.
-          binding.allowFirstFrame();
-          //final context = binding.renderViewElement;
-        });
-        _$initializeApp = null;
-      }
+    await _catchExceptions();
+    final dependencies = await $initializeDependencies(onProgress: onProgress).timeout(const Duration(minutes: 7));
+    await onSuccess?.call(dependencies);
+    return dependencies;
+  } on Object catch (error, stackTrace) {
+    onError?.call(error, stackTrace);
+    ErrorUtil.logError(error, stackTrace, hint: 'Failed to initialize app').ignore();
+    rethrow;
+  } finally {
+    stopwatch.stop();
+    binding.addPostFrameCallback((_) {
+      // Closes splash screen, and show the app layout.
+      binding.allowFirstFrame();
+      //final context = binding.renderViewElement;
     });
+    _$initializeApp = null;
+  }
+});
 
 /// Resets the app's state to its initial state.
 @visibleForTesting

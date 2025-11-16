@@ -1,5 +1,3 @@
-# Flutter template by Plague Fox
-
 ## Get started
 
 Replace project name, description and organization:

@@ -34,11 +34,10 @@ class OutlinedText extends StatelessWidget {
         textAlign: TextAlign.center,
         style: style.copyWith(
           height: 0,
-          foreground:
-              Paint()
-                ..style = PaintingStyle.stroke
-                ..strokeWidth = strokeWidth
-                ..color = strokeColor ?? Colors.black45,
+          foreground: Paint()
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = strokeWidth
+            ..color = strokeColor ?? Colors.black45,
         ),
       ),
       // Solid text as fill.

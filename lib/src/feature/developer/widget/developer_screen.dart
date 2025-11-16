@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_template_name/src/common/constant/pubspec.yaml.g.dart';
 import 'package:flutter_template_name/src/common/localization/localization.dart';
-import 'package:flutter_template_name/src/common/model/dependencies.dart';
+import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:flutter_template_name/src/common/widget/scaffold_padding.dart';
 import 'package:flutter_template_name/src/feature/developer/widget/logs_dialog.dart';
 import 'package:octopus/octopus.dart';
@@ -135,25 +135,24 @@ class _ShowApplicationInfoTile extends StatelessWidget {
       child: ListTile(
         title: const Text('Application information'),
         subtitle: const Text('Show information about the application.', maxLines: 1, overflow: TextOverflow.ellipsis),
-        onTap:
-            () => Octopus.of(context).showDialog<void>(
-              (context) => AboutDialog(
-                /* applicationName: pubspec.name, */
-                applicationVersion: Pubspec.version.representation,
-                applicationIcon: const SizedBox.square(dimension: 64, child: Icon(Icons.apps, size: 64)),
-                children: <Widget>[
-                  const _CopyTile(title: 'Name', subtitle: Pubspec.name, content: Pubspec.name),
-                  _CopyTile(
-                    title: 'Version',
-                    subtitle: Pubspec.version.representation,
-                    content: Pubspec.version.representation,
-                  ),
-                  const _CopyTile(title: 'Description', subtitle: Pubspec.description, content: Pubspec.description),
-                  const _CopyTile(title: 'Homepage', subtitle: Pubspec.homepage, content: Pubspec.homepage),
-                  const _CopyTile(title: 'Repository', subtitle: Pubspec.repository, content: Pubspec.repository),
-                ],
+        onTap: () => Octopus.of(context).showDialog<void>(
+          (context) => AboutDialog(
+            /* applicationName: pubspec.name, */
+            applicationVersion: Pubspec.version.representation,
+            applicationIcon: const SizedBox.square(dimension: 64, child: Icon(Icons.apps, size: 64)),
+            children: <Widget>[
+              const _CopyTile(title: 'Name', subtitle: Pubspec.name, content: Pubspec.name),
+              _CopyTile(
+                title: 'Version',
+                subtitle: Pubspec.version.representation,
+                content: Pubspec.version.representation,
               ),
-            ),
+              const _CopyTile(title: 'Description', subtitle: Pubspec.description, content: Pubspec.description),
+              const _CopyTile(title: 'Homepage', subtitle: Pubspec.homepage, content: Pubspec.homepage),
+              const _CopyTile(title: 'Repository', subtitle: Pubspec.repository, content: Pubspec.repository),
+            ],
+          ),
+        ),
       ),
     ),
   );
@@ -173,14 +172,13 @@ class _ShowLicensePageTile extends StatelessWidget {
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        onTap:
-            () => showLicensePage(
-              context: context,
-              applicationName: Pubspec.name,
-              applicationVersion: Pubspec.version.representation,
-              applicationIcon: const SizedBox.square(dimension: 64, child: Icon(Icons.apps, size: 64)),
-              useRootNavigator: true,
-            ),
+        onTap: () => showLicensePage(
+          context: context,
+          applicationName: Pubspec.name,
+          applicationVersion: Pubspec.version.representation,
+          applicationIcon: const SizedBox.square(dimension: 64, child: Icon(Icons.apps, size: 64)),
+          useRootNavigator: true,
+        ),
       ),
     ),
   );
@@ -196,36 +194,35 @@ class _ShowApplicationDependenciesTile extends StatelessWidget {
       child: ListTile(
         title: const Text('Dependencies'),
         subtitle: const Text('Show dependencies.', maxLines: 1, overflow: TextOverflow.ellipsis),
-        onTap:
-            () => Octopus.of(context).showDialog<void>(
-              (context) => Dialog(
-                insetPadding: const EdgeInsets.all(64),
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: SizedBox(
-                    width: 480,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+        onTap: () => Octopus.of(context).showDialog<void>(
+          (context) => Dialog(
+            insetPadding: const EdgeInsets.all(64),
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SizedBox(
+                width: 480,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text('Dependencies', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 16),
+                    Wrap(
                       children: <Widget>[
-                        const Text('Dependencies', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 16),
-                        Wrap(
-                          children: <Widget>[
-                            for (final dependency in Pubspec.dependencies.entries)
-                              Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: Chip(label: Text('${dependency.key}: ${dependency.value}')),
-                              ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
+                        for (final dependency in Pubspec.dependencies.entries)
+                          Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: Chip(label: Text('${dependency.key}: ${dependency.value}')),
+                          ),
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                  ],
                 ),
               ),
             ),
+          ),
+        ),
       ),
     ),
   );
@@ -241,36 +238,35 @@ class _ShowApplicationDevDependenciesTile extends StatelessWidget {
       child: ListTile(
         title: const Text('Dev Dependencies'),
         subtitle: const Text('Show developers dependencies.', maxLines: 1, overflow: TextOverflow.ellipsis),
-        onTap:
-            () => Octopus.of(context).showDialog<void>(
-              (context) => Dialog(
-                insetPadding: const EdgeInsets.all(64),
-                alignment: Alignment.center,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: SizedBox(
-                    width: 480,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+        onTap: () => Octopus.of(context).showDialog<void>(
+          (context) => Dialog(
+            insetPadding: const EdgeInsets.all(64),
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: SizedBox(
+                width: 480,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    const Text('Dev Dependencies', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 16),
+                    Wrap(
                       children: <Widget>[
-                        const Text('Dev Dependencies', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                        const SizedBox(height: 16),
-                        Wrap(
-                          children: <Widget>[
-                            for (final dependency in Pubspec.devDependencies.entries)
-                              Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: Chip(label: Text('${dependency.key}: ${dependency.value}')),
-                              ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
+                        for (final dependency in Pubspec.devDependencies.entries)
+                          Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: Chip(label: Text('${dependency.key}: ${dependency.value}')),
+                          ),
                       ],
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                  ],
                 ),
               ),
             ),
+          ),
+        ),
       ),
     ),
   );

@@ -110,10 +110,9 @@ class Chunker extends StreamTransformerBase<List<int>, td.Uint8List> {
 
   @override
   Stream<td.Uint8List> bind(Stream<List<int>> stream) {
-    final controller =
-        stream.isBroadcast
-            ? StreamController<td.Uint8List>.broadcast(sync: true)
-            : StreamController<td.Uint8List>(sync: true);
+    final controller = stream.isBroadcast
+        ? StreamController<td.Uint8List>.broadcast(sync: true)
+        : StreamController<td.Uint8List>(sync: true);
     return (controller..onListen = () => _onListen(stream, controller)).stream;
   }
 

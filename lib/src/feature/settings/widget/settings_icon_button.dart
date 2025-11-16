@@ -17,10 +17,9 @@ class SettingsIconButton extends StatelessWidget {
     tooltip: Localization.of(context).profileButton,
     onPressed: () {
       Octopus.maybeOf(context)?.setState(
-        (state) =>
-            state
-              ..removeByName(Routes.settings.name)
-              ..add(Routes.settings.node()),
+        (state) => state
+          ..removeByName(Routes.settings.name)
+          ..add(Routes.settings.node()),
       );
       HapticFeedback.mediumImpact().ignore();
     },

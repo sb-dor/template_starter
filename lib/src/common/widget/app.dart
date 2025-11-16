@@ -44,18 +44,17 @@ class _AppState extends State<App> with RouterStateMixin {
     theme: ThemeData.dark(),
 
     // Scopes
-    builder:
-        (context, child) => MediaQuery(
-          key: builderKey,
-          data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
-          child: WindowScope(
-            title: Localization.of(context).title,
-            child: OctopusTools(
-              enable: true,
-              octopus: router,
-              child: AuthenticationScope(child: child ?? const SizedBox.shrink()),
-            ),
-          ),
+    builder: (context, child) => MediaQuery(
+      key: builderKey,
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+      child: WindowScope(
+        title: Localization.of(context).title,
+        child: OctopusTools(
+          enable: true,
+          octopus: router,
+          child: AuthenticationScope(child: child ?? const SizedBox.shrink()),
         ),
+      ),
+    ),
   );
 }

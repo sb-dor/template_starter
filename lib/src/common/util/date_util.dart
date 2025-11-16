@@ -97,13 +97,12 @@ extension DateTimeExtension on DateTime {
     final dateTime = toLocal();
     final tz = dateTime.timeZoneOffset;
 
-    final buffer =
-        StringBuffer()
-          ..write(_isoFormat.format(dateTime))
-          ..write(tz.isNegative ? '-' : '+')
-          ..write(tz.inHours.abs().toString().padLeft(2, '0'))
-          ..write(':')
-          ..write((tz.inMinutes.abs() % 60).toString().padLeft(2, '0'));
+    final buffer = StringBuffer()
+      ..write(_isoFormat.format(dateTime))
+      ..write(tz.isNegative ? '-' : '+')
+      ..write(tz.inHours.abs().toString().padLeft(2, '0'))
+      ..write(':')
+      ..write((tz.inMinutes.abs() % 60).toString().padLeft(2, '0'));
 
     return buffer.toString();
   }

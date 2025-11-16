@@ -14,32 +14,28 @@ class SignUpScreen extends StatelessWidget {
     body: SafeArea(
       child: Center(
         child: LayoutBuilder(
-          builder:
-              (context, constraints) => SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: math.max(16, (constraints.maxWidth - 620) / 2)),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 50,
-                      child: Text(
-                        'Sign-Up',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(height: 1),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    const FormPlaceholder(),
-                    const SizedBox(height: 32),
-                    SizedBox(
-                      height: 48,
-                      child: _SignUpScreen$Buttons(cancel: () => Navigator.pop(context), signUp: null),
-                    ),
-                  ],
+          builder: (context, constraints) => SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: math.max(16, (constraints.maxWidth - 620) / 2)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 50,
+                  child: Text(
+                    'Sign-Up',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(height: 1),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 32),
+                const FormPlaceholder(),
+                const SizedBox(height: 32),
+                SizedBox(height: 48, child: _SignUpScreen$Buttons(cancel: () => Navigator.pop(context), signUp: null)),
+              ],
+            ),
+          ),
         ),
       ),
     ),

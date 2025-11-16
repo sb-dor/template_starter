@@ -6,7 +6,7 @@ import 'package:flutter_template_name/src/common/constant/pubspec.yaml.g.dart';
 import 'package:flutter_template_name/src/common/controller/controller_observer.dart';
 import 'package:flutter_template_name/src/common/database/database.dart';
 import 'package:flutter_template_name/src/common/model/app_metadata.dart';
-import 'package:flutter_template_name/src/common/model/dependencies.dart';
+import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:flutter_template_name/src/common/util/api_client.dart';
 import 'package:flutter_template_name/src/common/util/log_buffer.dart';
 import 'package:flutter_template_name/src/common/util/middleware/logger_mw.dart';
@@ -43,35 +43,33 @@ Future<Dependencies> $initializeDependencies({void Function(int progress, String
 typedef _InitializationStep = FutureOr<void> Function(Dependencies dependencies);
 final Map<String, _InitializationStep> _initializationSteps = <String, _InitializationStep>{
   'Platform pre-initialization': (_) => $platformInitialization(),
-  'Creating app metadata':
-      (dependencies) =>
-          dependencies.metadata = AppMetadata(
-            isWeb: platform.js,
-            isRelease: platform.buildMode.release,
-            appName: Pubspec.name,
-            appVersion: Pubspec.version.representation,
-            appVersionMajor: Pubspec.version.major,
-            appVersionMinor: Pubspec.version.minor,
-            appVersionPatch: Pubspec.version.patch,
-            appBuildTimestamp:
-                Pubspec.version.build.isNotEmpty ? (int.tryParse(Pubspec.version.build.firstOrNull ?? '-1') ?? -1) : -1,
-            operatingSystem: platform.operatingSystem.name,
-            processorsCount: platform.numberOfProcessors,
-            appLaunchedTimestamp: DateTime.now(),
-            locale: platform.locale,
-            deviceVersion: platform.version,
-            deviceScreenSize: ScreenUtil.screenSize().representation,
-          ),
+  'Creating app metadata': (dependencies) => dependencies.metadata = AppMetadata(
+    isWeb: platform.js,
+    isRelease: platform.buildMode.release,
+    appName: Pubspec.name,
+    appVersion: Pubspec.version.representation,
+    appVersionMajor: Pubspec.version.major,
+    appVersionMinor: Pubspec.version.minor,
+    appVersionPatch: Pubspec.version.patch,
+    appBuildTimestamp: Pubspec.version.build.isNotEmpty
+        ? (int.tryParse(Pubspec.version.build.firstOrNull ?? '-1') ?? -1)
+        : -1,
+    operatingSystem: platform.operatingSystem.name,
+    processorsCount: platform.numberOfProcessors,
+    appLaunchedTimestamp: DateTime.now(),
+    locale: platform.locale,
+    deviceVersion: platform.version,
+    deviceScreenSize: ScreenUtil.screenSize().representation,
+  ),
   'Observer state managment': (_) => Controller.observer = const ControllerObserver(),
   'Initializing analytics': (_) {},
   'Log app open': (_) {},
   'Get remote config': (_) {},
   'Restore settings': (_) {},
-  'Initialize shared preferences':
-      (dependencies) async => dependencies.sharedPreferences = await SharedPreferences.getInstance(),
-  'Connect to database':
-      (dependencies) =>
-          (dependencies.database = Config.inMemoryDatabase ? Database.memory() : Database.lazy()).refresh(),
+  'Initialize shared preferences': (dependencies) async =>
+      dependencies.sharedPreferences = await SharedPreferences.getInstance(),
+  'Connect to database': (dependencies) =>
+      (dependencies.database = Config.inMemoryDatabase ? Database.memory() : Database.lazy()).refresh(),
   'Shrink database': (dependencies) async {
     await dependencies.database.customStatement('VACUUM;');
     await dependencies.database.transaction(() async {
@@ -81,32 +79,30 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
                 ..limit(1, offset: 1000))
               .getSingleOrNull();
       if (log != null) {
-        await (dependencies.database.delete(dependencies.database.logTbl)
-          ..where((tbl) => tbl.time.isSmallerOrEqualValue(log.time))).go();
+        await (dependencies.database.delete(
+          dependencies.database.logTbl,
+        )..where((tbl) => tbl.time.isSmallerOrEqualValue(log.time))).go();
       }
     });
     if (DateTime.now().second % 10 == 0) await dependencies.database.customStatement('VACUUM;');
   },
   'Migrate app from previous version': (dependencies) => AppMigrator.migrate(dependencies.database),
-  'API Client':
-      (dependencies) =>
-          dependencies.apiClient = ApiClient(
-            baseUrl: Config.apiBaseUrl,
-            middlewares: [
-              const ApiClient$LoggerMiddleware(logRequest: false, logResponse: true, logError: true).call,
-              // dedupe interceptor
-              // authentification interceptor
-              // save all requests to database
-              // sentry interceptor
-              // cache interceptor
-              // retry interceptor
-            ],
-          ),
-  'Prepare authentication controller':
-      (dependencies) =>
-          dependencies.authenticationController = AuthenticationController(
-            repository: AuthenticationRepositoryImpl(sharedPreferences: dependencies.sharedPreferences),
-          ),
+  'API Client': (dependencies) => dependencies.apiClient = ApiClient(
+    baseUrl: Config.apiBaseUrl,
+    middlewares: [
+      const ApiClient$LoggerMiddleware(logRequest: false, logResponse: true, logError: true).call,
+      // dedupe interceptor
+      // authentification interceptor
+      // save all requests to database
+      // sentry interceptor
+      // cache interceptor
+      // retry interceptor
+    ],
+  ),
+  'Prepare authentication controller': (dependencies) =>
+      dependencies.authenticationController = AuthenticationController(
+        repository: AuthenticationRepositoryImpl(sharedPreferences: dependencies.sharedPreferences),
+      ),
   'Restore last user': (dependencies) => dependencies.authenticationController.restore(),
   'Initialize localization': (_) {},
   'Collect logs': (dependencies) async {
@@ -117,19 +113,18 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
         .then<List<LogMessage>>(
           (logs) => logs
               .map<LogMessage>(
-                (l) =>
-                    l.stack != null
-                        ? LogMessageError(
-                          timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
-                          level: LogLevel.fromValue(l.level),
-                          message: l.message,
-                          stackTrace: StackTrace.fromString(l.stack!),
-                        )
-                        : LogMessageVerbose(
-                          timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
-                          level: LogLevel.fromValue(l.level),
-                          message: l.message,
-                        ),
+                (l) => l.stack != null
+                    ? LogMessageError(
+                        timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
+                        level: LogLevel.fromValue(l.level),
+                        message: l.message,
+                        stackTrace: StackTrace.fromString(l.stack!),
+                      )
+                    : LogMessageVerbose(
+                        timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
+                        level: LogLevel.fromValue(l.level),
+                        message: l.message,
+                      ),
               )
               .toList(growable: false),
         )

@@ -20,12 +20,11 @@ final class Localization extends generated.GeneratedLocalization {
   /// Get localization instance for the widget structure.
   static Localization of(BuildContext context) => switch (Localizations.of<Localization>(context, Localization)) {
     Localization localization => localization,
-    _ =>
-      throw ArgumentError(
-        'Out of scope, not found inherited widget '
-            'a Localization of the exact type',
-        'out_of_scope',
-      ),
+    _ => throw ArgumentError(
+      'Out of scope, not found inherited widget '
+          'a Localization of the exact type',
+      'out_of_scope',
+    ),
   };
 
   /// Get language by code.

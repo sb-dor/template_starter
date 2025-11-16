@@ -13,10 +13,9 @@ class AppError extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
     title: 'App Error',
-    theme:
-        View.of(context).platformDispatcher.platformBrightness == Brightness.dark
-            ? ThemeData.dark(useMaterial3: true)
-            : ThemeData.light(useMaterial3: true),
+    theme: View.of(context).platformDispatcher.platformBrightness == Brightness.dark
+        ? ThemeData.dark(useMaterial3: true)
+        : ThemeData.light(useMaterial3: true),
     home: Scaffold(
       body: SafeArea(
         child: Center(
@@ -31,8 +30,9 @@ class AppError extends StatelessWidget {
         ),
       ),
     ),
-    builder:
-        (context, child) =>
-            MediaQuery(data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling), child: child!),
+    builder: (context, child) => MediaQuery(
+      data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+      child: child!,
+    ),
   );
 }

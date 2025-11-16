@@ -60,17 +60,15 @@ class _InheritedSettingsScope extends InheritedWidget {
   /// The state from the closest instance of this class
   /// that encloses the given context, if any.
   /// For example: `SettingsScope.maybeOf(context)`.
-  static _InheritedSettingsScope? maybeOf(BuildContext context, {bool listen = true}) =>
-      listen
-          ? context.dependOnInheritedWidgetOfExactType<_InheritedSettingsScope>()
-          : context.getInheritedWidgetOfExactType<_InheritedSettingsScope>();
+  static _InheritedSettingsScope? maybeOf(BuildContext context, {bool listen = true}) => listen
+      ? context.dependOnInheritedWidgetOfExactType<_InheritedSettingsScope>()
+      : context.getInheritedWidgetOfExactType<_InheritedSettingsScope>();
 
-  static Never _notFoundInheritedWidgetOfExactType() =>
-      throw ArgumentError(
-        'Out of scope, not found inherited widget '
-            'a _InheritedSettingsScope of the exact type',
-        'out_of_scope',
-      );
+  static Never _notFoundInheritedWidgetOfExactType() => throw ArgumentError(
+    'Out of scope, not found inherited widget '
+        'a _InheritedSettingsScope of the exact type',
+    'out_of_scope',
+  );
 
   /// The state from the closest instance of this class
   /// that encloses the given context.

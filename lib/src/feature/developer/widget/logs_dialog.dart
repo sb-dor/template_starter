@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_template_name/src/common/database/database.dart' as db;
-import 'package:flutter_template_name/src/common/model/dependencies.dart';
+import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:flutter_template_name/src/common/util/date_util.dart';
 import 'package:l/l.dart';
 import 'package:octopus/octopus.dart';
@@ -43,27 +43,25 @@ class _LogsListState extends State<_LogsList> {
     super.initState();
     final database = Dependencies.of(context).database;
     Future<void>(() async {
-      final rows =
-          await (database.select(database.logTbl)
-            ..orderBy([(tbl) => db.OrderingTerm(expression: tbl.time, mode: db.OrderingMode.desc)])).get();
-      logs =
-          rows
-              .map(
-                (l) =>
-                    l.stack != null
-                        ? LogMessageError(
-                          timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
-                          level: LogLevel.fromValue(l.level),
-                          message: l.message,
-                          stackTrace: StackTrace.fromString(l.stack!),
-                        )
-                        : LogMessageVerbose(
-                          timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
-                          level: LogLevel.fromValue(l.level),
-                          message: l.message,
-                        ),
-              )
-              .toList();
+      final rows = await (database.select(
+        database.logTbl,
+      )..orderBy([(tbl) => db.OrderingTerm(expression: tbl.time, mode: db.OrderingMode.desc)])).get();
+      logs = rows
+          .map(
+            (l) => l.stack != null
+                ? LogMessageError(
+                    timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
+                    level: LogLevel.fromValue(l.level),
+                    message: l.message,
+                    stackTrace: StackTrace.fromString(l.stack!),
+                  )
+                : LogMessageVerbose(
+                    timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
+                    level: LogLevel.fromValue(l.level),
+                    message: l.message,
+                  ),
+          )
+          .toList();
       await _filter();
     });
     _controller.addListener(_filter);
@@ -163,15 +161,14 @@ class _LogTile extends StatelessWidget {
         dense: true,
         trailing: IconButton(
           icon: const Icon(Icons.copy),
-          onPressed:
-              () => Clipboard.setData(
-                ClipboardData(
-                  text: switch (log) {
-                    LogMessageError log => '${log.message}\n${log.stackTrace}',
-                    _ => '${log.message}',
-                  },
-                ),
-              ),
+          onPressed: () => Clipboard.setData(
+            ClipboardData(
+              text: switch (log) {
+                LogMessageError log => '${log.message}\n${log.stackTrace}',
+                _ => '${log.message}',
+              },
+            ),
+          ),
         ),
       ),
       const Divider(height: 1),

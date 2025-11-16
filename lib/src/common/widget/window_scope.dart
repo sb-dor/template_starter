@@ -25,15 +25,17 @@ class WindowScope extends StatefulWidget {
 
 class _WindowScopeState extends State<WindowScope> {
   @override
-  Widget build(BuildContext context) =>
-      kIsWeb || io.Platform.isAndroid || io.Platform.isIOS
-          ? widget.child
-          : Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[const _WindowTitle(), Expanded(child: widget.child)],
-          );
+  Widget build(BuildContext context) => kIsWeb || io.Platform.isAndroid || io.Platform.isIOS
+      ? widget.child
+      : Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            const _WindowTitle(),
+            Expanded(child: widget.child),
+          ],
+        );
 }
 
 class _WindowTitle extends StatefulWidget {
@@ -108,11 +110,10 @@ class _WindowTitleState extends State<_WindowTitle> with WindowListener {
                   child: Center(
                     child: AnimatedSwitcher(
                       duration: const Duration(milliseconds: 250),
-                      transitionBuilder:
-                          (child, animation) => FadeTransition(
-                            opacity: animation,
-                            child: ScaleTransition(scale: animation, child: child),
-                          ),
+                      transitionBuilder: (child, animation) => FadeTransition(
+                        opacity: animation,
+                        child: ScaleTransition(scale: animation, child: child),
+                      ),
                       child: Text(
                         context.findAncestorWidgetOfExactType<WindowScope>()?.title ?? Localization.of(context).app,
                         maxLines: 1,
@@ -162,11 +163,10 @@ class _WindowButtons$Windows extends StatelessWidget {
         // Is always on top
         ValueListenableBuilder<bool>(
           valueListenable: _isAlwaysOnTop,
-          builder:
-              (context, isAlwaysOnTop, _) => _WindowButton(
-                onPressed: () => setAlwaysOnTop(!isAlwaysOnTop),
-                icon: isAlwaysOnTop ? Icons.push_pin : Icons.push_pin_outlined,
-              ),
+          builder: (context, isAlwaysOnTop, _) => _WindowButton(
+            onPressed: () => setAlwaysOnTop(!isAlwaysOnTop),
+            icon: isAlwaysOnTop ? Icons.push_pin : Icons.push_pin_outlined,
+          ),
         ),
 
         // Minimize
@@ -175,11 +175,10 @@ class _WindowButtons$Windows extends StatelessWidget {
         // Set full screen
         ValueListenableBuilder<bool>(
           valueListenable: _isFullScreen,
-          builder:
-              (context, isFullScreen, _) => _WindowButton(
-                onPressed: () => windowManager.setFullScreen(!isFullScreen),
-                icon: isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
-              ),
+          builder: (context, isFullScreen, _) => _WindowButton(
+            onPressed: () => windowManager.setFullScreen(!isFullScreen),
+            icon: isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
+          ),
         ),
 
         // Close

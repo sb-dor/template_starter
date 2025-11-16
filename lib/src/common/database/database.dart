@@ -186,9 +186,9 @@ mixin _DatabaseKeyValueMixin on _$Database implements IKeyValueStorage {
     return keys == null
         ? Map<String, Object>.of(_$store)
         : <String, Object>{
-          for (final e in _$store.entries)
-            if (keys.contains(e.key)) e.key: e.value,
-        };
+            for (final e in _$store.entries)
+              if (keys.contains(e.key)) e.key: e.value,
+          };
   }
 
   @override
@@ -199,20 +199,18 @@ mixin _DatabaseKeyValueMixin on _$Database implements IKeyValueStorage {
       for (final e in data.entries) (e.key, e.value, _kvCompanionFromKeyValue(e.key, e.value)),
     ];
     final toDelete = entries.where((e) => e.$3 == null).map<String>((e) => e.$1).toSet();
-    final toInsert =
-        entries.expand<(String, Object, KvTblCompanion)>((e) sync* {
-          final value = e.$2;
-          final companion = e.$3;
-          if (companion == null || value == null) return;
-          yield (e.$1, value, companion);
-        }).toList();
+    final toInsert = entries.expand<(String, Object, KvTblCompanion)>((e) sync* {
+      final value = e.$2;
+      final companion = e.$3;
+      if (companion == null || value == null) return;
+      yield (e.$1, value, companion);
+    }).toList();
     for (final key in toDelete) _$store.remove(key);
     _$store.addAll(<String, Object>{for (final e in toInsert) e.$1: e.$2});
     batch(
-      (b) =>
-          b
-            ..deleteWhere(kvTbl, (tbl) => tbl.k.isIn(toDelete))
-            ..insertAllOnConflictUpdate(kvTbl, toInsert.map((e) => e.$3).toList(growable: false)),
+      (b) => b
+        ..deleteWhere(kvTbl, (tbl) => tbl.k.isIn(toDelete))
+        ..insertAllOnConflictUpdate(kvTbl, toInsert.map((e) => e.$3).toList(growable: false)),
     ).ignore();
   }
 
