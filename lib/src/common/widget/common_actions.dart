@@ -11,7 +11,7 @@ class CommonActions extends ListBase<Widget> {
   CommonActions([List<Widget>? actions])
     : _actions = <Widget>[
         ...?actions,
-        if (kDebugMode) const DeveloperButton(),
+        const DeveloperButton(),
         const HistoryButton(),
         const ProfileIconButton(),
         const LogOutButton(),

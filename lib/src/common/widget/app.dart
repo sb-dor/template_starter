@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_project/src/common/constant/config.dart';
@@ -51,7 +52,7 @@ class _AppState extends State<App> with RouterStateMixin {
       child: WindowScope(
         title: Localization.of(context).title,
         child: OctopusTools(
-          enable: true,
+          enable: !kReleaseMode,
           octopus: router,
           child: AuthenticationScope(child: child ?? const SizedBox.shrink()),
         ),

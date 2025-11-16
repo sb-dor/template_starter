@@ -163,6 +163,32 @@ class ApiClient /* with http_package.BaseClient implements http_package.Client *
     body: body,
     context: <String, Object?>{},
   );
+
+  Future<APIClientResponse> put(
+    String path, {
+    Map<String, String>? headers,
+    Map<String, Object?>? body,
+  }) => _sendUnstreamed(
+    handler: _handler,
+    method: 'PUT',
+    url: _mergePath(_baseUrl, path),
+    headers: headers,
+    body: body,
+    context: <String, Object?>{},
+  );
+
+  Future<APIClientResponse> delete(
+    String path, {
+    Map<String, String>? headers,
+    Map<String, Object?>? body,
+  }) => _sendUnstreamed(
+    handler: _handler,
+    method: 'DELETE',
+    url: _mergePath(_baseUrl, path),
+    headers: headers,
+    body: body,
+    context: <String, Object?>{},
+  );
 }
 
 /// Creates a new [ApiClientHandler] from the given [internalClient] and [middleware].

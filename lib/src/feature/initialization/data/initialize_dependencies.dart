@@ -20,6 +20,7 @@ import 'package:l/l.dart';
 import 'package:platform_info/platform_info.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 
 /// Initializes the app and returns a [Dependencies] object
 Future<Dependencies> $initializeDependencies({
@@ -95,60 +96,81 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
           apiClient: dependencies.apiClient,
         ),
       ),
-  'Initialize localization': (_) {},
-  'Collect logs': (dependencies) async {
-    await (dependencies.database.select<LogTbl, Log>(dependencies.database.logTbl)
-          ..orderBy([
-            (tbl) => drift.OrderingTerm(
-              expression: tbl.time as drift.Expression<Object>,
-              mode: drift.OrderingMode.desc,
+
+  // The 'Shrink database' step will only be included in non-release builds.
+  if (!kReleaseMode)
+    'Shrink database': (dependencies) async {
+      await dependencies.database.customStatement('VACUUM;');
+      await dependencies.database.transaction(() async {
+        final log =
+            await (dependencies.database.select<LogTbl, Log>(dependencies.database.logTbl)
+                  ..orderBy([
+                    (tbl) => drift.OrderingTerm(expression: tbl.id, mode: drift.OrderingMode.desc),
+                  ])
+                  ..limit(1, offset: 1000))
+                .getSingleOrNull();
+        if (log != null) {
+          await (dependencies.database.delete(
+            dependencies.database.logTbl,
+          )..where((tbl) => tbl.time.isSmallerOrEqualValue(log.time))).go();
+        }
+      });
+      if (DateTime.now().second % 10 == 0) await dependencies.database.customStatement('VACUUM;');
+    },
+
+  if (!kReleaseMode)
+    'Collect logs': (dependencies) async {
+      await (dependencies.database.select<LogTbl, Log>(dependencies.database.logTbl)
+            ..orderBy([
+              (tbl) => drift.OrderingTerm(
+                expression: tbl.time as drift.Expression<Object>,
+                mode: drift.OrderingMode.desc,
+              ),
+            ])
+            ..limit(LogBuffer.bufferLimit))
+          .get()
+          .then<List<LogMessage>>(
+            (logs) => logs
+                .map<LogMessage>(
+                  (l) => l.stack != null
+                      ? LogMessageError(
+                          timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
+                          level: LogLevel.fromValue(l.level),
+                          message: l.message,
+                          stackTrace: StackTrace.fromString(l.stack!),
+                        )
+                      : LogMessageVerbose(
+                          timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
+                          level: LogLevel.fromValue(l.level),
+                          message: l.message,
+                        ),
+                )
+                .toList(growable: false),
+          )
+          .then<void>(LogBuffer.instance.addAll);
+      l
+          .bufferTime(const Duration(seconds: 1))
+          .where((logs) => logs.isNotEmpty)
+          .listen(LogBuffer.instance.addAll, cancelOnError: false);
+      l
+          .map<LogTblCompanion>(
+            (log) => LogTblCompanion.insert(
+              level: log.level.level,
+              message: log.message.toString(),
+              time: drift.Value<int>(log.timestamp.millisecondsSinceEpoch ~/ 1000),
+              stack: drift.Value<String?>(switch (log) {
+                LogMessageError l => l.stackTrace.toString(),
+                _ => null,
+              }),
             ),
-          ])
-          ..limit(LogBuffer.bufferLimit))
-        .get()
-        .then<List<LogMessage>>(
-          (logs) => logs
-              .map<LogMessage>(
-                (l) => l.stack != null
-                    ? LogMessageError(
-                        timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
-                        level: LogLevel.fromValue(l.level),
-                        message: l.message,
-                        stackTrace: StackTrace.fromString(l.stack!),
-                      )
-                    : LogMessageVerbose(
-                        timestamp: DateTime.fromMillisecondsSinceEpoch(l.time * 1000),
-                        level: LogLevel.fromValue(l.level),
-                        message: l.message,
-                      ),
-              )
-              .toList(growable: false),
-        )
-        .then<void>(LogBuffer.instance.addAll);
-    l
-        .bufferTime(const Duration(seconds: 1))
-        .where((logs) => logs.isNotEmpty)
-        .listen(LogBuffer.instance.addAll, cancelOnError: false);
-    l
-        .map<LogTblCompanion>(
-          (log) => LogTblCompanion.insert(
-            level: log.level.level,
-            message: log.message.toString(),
-            time: drift.Value<int>(log.timestamp.millisecondsSinceEpoch ~/ 1000),
-            stack: drift.Value<String?>(switch (log) {
-              LogMessageError l => l.stackTrace.toString(),
-              _ => null,
-            }),
-          ),
-        )
-        .bufferTime(const Duration(seconds: 5))
-        .where((logs) => logs.isNotEmpty)
-        .listen(
-          (logs) => dependencies.database
-              .batch((batch) => batch.insertAll(dependencies.database.logTbl, logs))
-              .ignore(),
-          cancelOnError: false,
-        );
-  },
-  'Log app initialized': (_) {},
+          )
+          .bufferTime(const Duration(seconds: 5))
+          .where((logs) => logs.isNotEmpty)
+          .listen(
+            (logs) => dependencies.database
+                .batch((batch) => batch.insertAll(dependencies.database.logTbl, logs))
+                .ignore(),
+            cancelOnError: false,
+          );
+    },
 };

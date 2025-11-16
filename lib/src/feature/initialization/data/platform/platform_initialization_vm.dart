@@ -28,7 +28,7 @@ Future<void> _$desktopInitialization() async {
     size: const Size(960, 800),
     /* maximumSize: const Size(1440, 1080), */
     center: true,
-    windowButtonVisibility: false,
+    windowButtonVisibility: true,
     backgroundColor: platform.platformBrightness == Brightness.dark
         ? ThemeData.dark().colorScheme.surface
         : ThemeData.light().colorScheme.surface,

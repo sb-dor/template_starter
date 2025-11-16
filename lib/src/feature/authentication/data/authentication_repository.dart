@@ -1,13 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
-
-import 'package:flutter/widgets.dart';
 import 'package:flutter_project/src/common/util/api_client.dart';
 import 'package:flutter_project/src/feature/authentication/model/sign_in_data.dart';
 import 'package:flutter_project/src/feature/authentication/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-abstract interface class IAuthenticationRepository {}
+abstract interface class IAuthenticationRepository {
+  Future<User> signIn(SignInData data);
+}
 
 class AuthenticationRepositoryImpl implements IAuthenticationRepository {
   AuthenticationRepositoryImpl({
@@ -18,6 +17,14 @@ class AuthenticationRepositoryImpl implements IAuthenticationRepository {
 
   final SharedPreferences _sharedPreferences;
   final ApiClient _apiClient;
+
+  @override
+  Future<User> signIn(SignInData data) {
+    throw UnimplementedError();
+  }
 }
 
-class AuthenticationRepositoryFake implements IAuthenticationRepository {}
+class AuthenticationRepositoryFake implements IAuthenticationRepository {
+  @override
+  Future<User> signIn(SignInData data) async => User.defaultUser();
+}
