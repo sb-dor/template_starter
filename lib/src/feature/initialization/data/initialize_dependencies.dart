@@ -44,6 +44,7 @@ Future<Dependencies> $initializeDependencies({
 }
 
 typedef _InitializationStep = FutureOr<void> Function(Dependencies dependencies);
+
 final Map<String, _InitializationStep> _initializationSteps = <String, _InitializationStep>{
   'Platform pre-initialization': (_) => $platformInitialization(),
   'Creating app metadata': (dependencies) => dependencies.metadata = AppMetadata(
@@ -74,27 +75,6 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
   'Connect to database': (dependencies) => dependencies.database = Config.inMemoryDatabase
       ? AppDatabase.defaults(name: 'memory')
       : AppDatabase.defaults(name: 'app_database'),
-  // 'Shrink database': (dependencies) async {
-  //   await dependencies.database.customStatement('VACUUM;');
-  //   await dependencies.database.transaction(() async {
-  //     final log =
-  //         await (dependencies.database.select<LogTbl, Log>(dependencies.database.logTbl)
-  //               ..orderBy([
-  //                 (tbl) => drift.OrderingTerm(
-  //                   expression: tbl.id as drift.Expression<Object>,
-  //                   mode: drift.OrderingMode.desc,
-  //                 ),
-  //               ])
-  //               ..limit(1, offset: 1000))
-  //             .getSingleOrNull();
-  //     if (log != null) {
-  //       await (dependencies.database.delete(
-  //         dependencies.database.logTbl,
-  //       )..where((tbl) => tbl.time.isSmallerOrEqualValue(log.time))).go();
-  //     }
-  //   });
-  //   if (DateTime.now().second % 10 == 0) await dependencies.database.customStatement('VACUUM;');
-  // },
   'API Client': (dependencies) => dependencies.apiClient = ApiClient(
     baseUrl: Config.apiBaseUrl,
     middlewares: [
@@ -109,7 +89,10 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
   ),
   'Prepare authentication controller': (dependencies) =>
       dependencies.authenticationController = AuthenticationController(
-        repository: AuthenticationRepositoryImpl(sharedPreferences: dependencies.sharedPreferences),
+        repository: AuthenticationRepositoryImpl(
+          sharedPreferences: dependencies.sharedPreferences,
+          apiClient: dependencies.apiClient,
+        ),
       ),
   'Initialize localization': (_) {},
   'Collect logs': (dependencies) async {

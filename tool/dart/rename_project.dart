@@ -20,10 +20,10 @@ import 'package:path/path.dart' as p;
 // then change after renaming you project, after running:
 // dart run tool/dart/rename_project.dart --name="qqq" --organization="www" --description="eee"
 const String _defaultName = 'flutter_project'; // current app's defaultName
-const String _defaultOrganization = 'com.sbdor.project'; // current app's defaultOrganizationName
+const String _defaultOrganization = 'dev.flutter';
 const String _defaultDescription = '_description';
 
-/// dart run tool/dart/rename_project.dart --name="qqq" --organization="www" --description="eee"
+/// dart run tool/dart/rename_project.dart --name="flutter_project_name" --organization="dev.flutter" --description="flutter_desc"
 void main([List<String>? args]) {
   if (args == null || args.isEmpty) _throwArguments();
   String? extractArg(String key) {
