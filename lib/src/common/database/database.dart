@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
-import 'package:flutter_template_name/src/common/database/tables/log_table.dart';
+import 'package:flutter_project/src/common/database/tables/log_table.dart';
 
 part 'database.g.dart';
 

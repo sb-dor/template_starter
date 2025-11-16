@@ -1,6 +1,6 @@
 import 'dart:developer' as developer;
 
-import 'package:flutter_template_name/src/common/util/api_client.dart';
+import 'package:flutter_project/src/common/util/api_client.dart';
 import 'package:meta/meta.dart';
 
 @immutable

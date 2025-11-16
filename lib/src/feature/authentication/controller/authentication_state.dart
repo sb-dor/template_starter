@@ -1,4 +1,4 @@
-import 'package:flutter_template_name/src/feature/authentication/model/user.dart';
+import 'package:flutter_project/src/feature/authentication/model/user.dart';
 import 'package:meta/meta.dart';
 
 /// {@template authentication_state}

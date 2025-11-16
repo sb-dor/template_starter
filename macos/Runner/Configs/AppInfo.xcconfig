@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = flutter_template_name
+PRODUCT_NAME = Template
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = dev.flutter.template.flutterTemplateName
+PRODUCT_BUNDLE_IDENTIFIER = com.sbdor.template
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2025 dev.flutter.template. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2025 www.sbdor.template. All rights reserved.

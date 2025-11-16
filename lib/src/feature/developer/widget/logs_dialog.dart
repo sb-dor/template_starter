@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_template_name/src/common/util/date_util.dart';
-import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
+import 'package:flutter_project/src/common/util/date_util.dart';
+import 'package:flutter_project/src/feature/initialization/models/dependencies.dart';
 import 'package:l/l.dart';
 import 'package:octopus/octopus.dart';
 

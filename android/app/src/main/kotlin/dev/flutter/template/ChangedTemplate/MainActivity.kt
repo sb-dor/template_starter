@@ -1,4 +1,4 @@
-package dev.flutter.template.flutter_template_name
+package www.sbdor.template.flutter_project
 
 import io.flutter.embedding.android.FlutterActivity
 

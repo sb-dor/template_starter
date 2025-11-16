@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_template_name/src/common/util/error_util.dart';
-import 'package:flutter_template_name/src/feature/initialization/data/initialize_dependencies.dart';
+import 'package:flutter_project/src/common/util/error_util.dart';
+import 'package:flutter_project/src/feature/initialization/data/initialize_dependencies.dart';
 /* import 'package:database/database.dart'; */
-import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
+import 'package:flutter_project/src/feature/initialization/models/dependencies.dart';
 
 /// Ephemerally initializes the app and prepares it for use.
 Future<Dependencies>? _$initializeApp;

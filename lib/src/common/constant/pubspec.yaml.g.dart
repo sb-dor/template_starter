@@ -149,7 +149,7 @@ sealed class Pubspec {
   /// Try to pick a name that is clear, terse, and not already in use.
   /// A quick search of packages on the [pub.dev site](https://pub.dev/packages)
   /// to make sure that nothing else is using your name is recommended.
-  static const String name = r'flutter_template_name';
+  static const String name = r'flutter_project';
 
   /// Description
   ///
@@ -164,7 +164,7 @@ sealed class Pubspec {
   /// Think of the description as the sales pitch for your package.
   /// Users see it when they [browse for packages](https://pub.dev/packages).
   /// The description is plain text: no markdown or HTML.
-  static const String description = r'flutter_template_description';
+  static const String description = r'Template Project';
 
   /// Homepage
   ///

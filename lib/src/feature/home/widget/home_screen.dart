@@ -1,4 +1,4 @@
-import 'package:flutter_template_name/src/common/widget/common_actions.dart';
+import 'package:flutter_project/src/common/widget/common_actions.dart';
 import 'package:ui/ui.dart';
 
 /// {@template home_screen}

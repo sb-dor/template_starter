@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_template_name/src/common/database/database.dart';
-import 'package:flutter_template_name/src/common/model/app_metadata.dart';
-import 'package:flutter_template_name/src/common/util/api_client.dart';
-import 'package:flutter_template_name/src/feature/authentication/controller/authentication_controller.dart';
-import 'package:flutter_template_name/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:flutter_project/src/common/database/database.dart';
+import 'package:flutter_project/src/common/model/app_metadata.dart';
+import 'package:flutter_project/src/common/util/api_client.dart';
+import 'package:flutter_project/src/feature/authentication/controller/authentication_controller.dart';
+import 'package:flutter_project/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// {@template dependencies}

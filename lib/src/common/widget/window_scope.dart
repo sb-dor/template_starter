@@ -2,7 +2,7 @@ import 'dart:io' as io;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_template_name/src/common/localization/localization.dart';
+import 'package:flutter_project/src/common/localization/localization.dart';
 import 'package:platform_info/platform_info.dart';
 import 'package:window_manager/window_manager.dart';
 

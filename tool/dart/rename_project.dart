@@ -1,11 +1,27 @@
+/// This is for renaming projects bungleId, name , organization. But I do not use this
+///
+/// Im using rename package
+///
+/// for changing app's name run in terminal
+///
+///   rename setAppName --targets ios,android,macos,windows,linux,web --value "YourAppName"
+///
+/// for changing appBundle run:
+///
+///   rename setBundleId --targets ios,android,macos,windows,linux,web --value "com.example.bundleId"
+
+// ignore_for_file: dangling_library_doc_comments
+
 import 'dart:io' as io;
 
 import 'package:collection/collection.dart';
 import 'package:path/path.dart' as p;
 
-const String _defaultName = 'flutter_template_name';
-const String _defaultOrganization = 'dev.flutter.template';
-const String _defaultDescription = 'flutter_template_description';
+// then change after renaming you project, after running:
+// dart run tool/dart/rename_project.dart --name="qqq" --organization="www" --description="eee"
+const String _defaultName = 'flutter_project'; // current app's defaultName
+const String _defaultOrganization = 'com.sbdor.project'; // current app's defaultOrganizationName
+const String _defaultDescription = '_description';
 
 /// dart run tool/dart/rename_project.dart --name="qqq" --organization="www" --description="eee"
 void main([List<String>? args]) {
@@ -13,7 +29,9 @@ void main([List<String>? args]) {
   String? extractArg(String key) {
     final value = args.firstWhereOrNull((e) => e.startsWith(key));
     if (value == null) return null;
-    return RegExp(r'[\d\w\.\-\_ ]+').allMatches(value.substring(key.length)).map((e) => e.group(0)).join().trim();
+    return RegExp(
+      r'[\d\w\.\-\_ ]+',
+    ).allMatches(value.substring(key.length)).map((e) => e.group(0)).join().trim();
   }
 
   final name = extractArg('--name');

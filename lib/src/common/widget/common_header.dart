@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template_name/src/common/widget/common_actions.dart';
+import 'package:flutter_project/src/common/widget/common_actions.dart';
 
 class SliverCommonHeader extends SliverAppBar {
   SliverCommonHeader({
