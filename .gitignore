@@ -52,3 +52,9 @@ reports/
 
 # FVM Version Cache
 .fvm/
+
+firebase.json
+*.freezed.dart
+*.g.dart
+
+sentry.properties
