@@ -17,7 +17,7 @@ class Shimmer extends StatefulWidget {
   const Shimmer({
     this.color,
     this.backgroundColor,
-    this.speed = 15 / 8000000,
+    this.speed = 80 / 8000000,
     this.stripeWidth = .2,
     this.size = const Size(128, 28),
     this.cornerRadius = 8,

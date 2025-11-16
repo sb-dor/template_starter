@@ -1,4 +1,5 @@
 {
   "ENVIRONMENT": "development",
+  "API_BASE_URL": "",
   "MAX_LAYOUT_WIDTH": 768
 }

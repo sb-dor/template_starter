@@ -21,6 +21,7 @@ enum Routes with OctopusRoute {
   @override
   final String name;
 
+  /// title is not necessary
   @override
   final String? title;
 

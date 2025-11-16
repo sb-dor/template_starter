@@ -26,7 +26,6 @@ class DeveloperScreen extends StatelessWidget {
           floating: true,
           snap: true,
         ),
-
         // --- Authentication --- //
         _GroupSeparator(title: Localization.of(context).authentication),
         const _OpenUriTile(title: 'Profile', description: 'Information about current user'),

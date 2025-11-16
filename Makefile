@@ -99,7 +99,7 @@ coverage: get ## Generate the coverage report
 
 .PHONY: analyze
 analyze: get ## Analyze the code
-	@dart format --set-exit-if-changed -l 120 -o none lib/ test/
+	@dart format --set-exit-if-changed -l 100 -o none lib/ test/
 	@flutter analyze --fatal-infos --fatal-warnings lib/ test/
 
 .PHONY: check
@@ -164,34 +164,34 @@ diff: ## git diff
 	@git diff --exit-code
 	@RES=$$(git status --porcelain) ; if [ -n "$$RES" ]; then echo $$RES && exit 1 ; fi
 
-.PHONY: build-android
+.PHONY: build-android-apk
 build-android: ## Build the android app
-	@flutter build apk --release --dart-define-from-file=config/development.json
+	@flutter build apk --release --dart-define-from-file=config/production.json
+
+.PHONY: build-android-appbundle
+build-android: ## Build the android app
+	@flutter build appbundle --release --dart-define-from-file=config/production.json
 
 .PHONY: build-windows
 build-windows: ## Build the windows app
-	@flutter build windows --release --dart-define-from-file=config/development.json
+	@flutter build windows --release --dart-define-from-file=config/production.json
 
 .PHONY: build-web
 build-web: ## Build the web app
-	@flutter build web --release --dart-define-from-file=config/development.json --no-source-maps --pwa-strategy offline-first --web-renderer canvaskit --web-resources-cdn --base-href /
+	@flutter build web --release --dart-define-from-file=config/production.json --no-source-maps --pwa-strategy offline-first --web-renderer canvaskit --web-resources-cdn --base-href /
 
 .PHONY: build-ios
 build-ios: ## Build the ios app
-	@flutter build ios --release --dart-define-from-file=config/development.json
+	@flutter build ios --release --dart-define-from-file=config/production.json
 
 .PHONY: build-macos
 build-macos: ## Build the macos app
-	@flutter build macos --release --dart-define-from-file=config/development.json
+	@flutter build macos --release --dart-define-from-file=config/production.json
 
 .PHONY: build-linux
 build-linux: ## Build the linux app
-	@flutter build linux --release --dart-define-from-file=config/development.json
+	@flutter build linux --release --dart-define-from-file=config/production.json
 
-init-firebase:
-	@npm install -g firebase-tools
-	@firebase login
-	@firebase init
 #	@dart pub global activate flutterfire_cli
 #	@flutterfire configure \
 #		-i tld.domain.app \

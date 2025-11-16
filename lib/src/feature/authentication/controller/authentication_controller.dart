@@ -44,5 +44,8 @@ final class AuthenticationController extends StateController<AuthenticationState
     setState(AuthenticationState.authenticated(User.defaultUser()));
   });
 
-  void logout() => handle(() async {});
+  void logout() => handle(() async {
+    if (state is! Authentication$AuthenticatedState) return;
+    setState(AuthenticationState.idle());
+  });
 }

@@ -20,7 +20,7 @@ mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
     // Create router.
     router = Octopus(
       routes: Routes.values,
-      defaultRoute: Routes.home,
+      defaultRoute: Routes.home, // change defaultRoute if it's not needed
       guards: <IOctopusGuard>[
         // Check authentication.
         AuthenticationGuard(
@@ -29,14 +29,14 @@ mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
           // Available routes for non authenticated user.
           routes: <String>{Routes.signin.name, Routes.signup.name},
           // Default route for non authenticated user.
-          signinNavigation: OctopusState.single(Routes.signin.node()),
+          signInNavigation: OctopusState.single(Routes.signin.node()),
           // Default route for authenticated user.
           homeNavigation: OctopusState.single(Routes.home.node()),
           // Check authentication on every authentication controller state change.
+          // if you use bloc just navigate to the specific screen manually after states changes to Authenticated
           refresh: dependencies.authenticationController,
         ),
         // Home route should be always on top.
-        HomeGuard(),
       ],
       onError: (error, stackTrace) =>
           errorsObserver.value = <({Object error, StackTrace stackTrace})>[

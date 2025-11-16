@@ -17,9 +17,15 @@ void main() => appZone(() async {
     progress: 0,
     message: '',
   ));
+
+  /// Calling runApp again will detach the previous root widget from the view and attach the given
+  /// widget in its place. The new widget tree is compared against the previous widget tree and any
+  /// differences are applied to the underlying render tree, similar to what happens when a StatefulWidget
+  /// rebuilds after calling State.setState.
   // runApp(InitializationSplashScreen(progress: initializationProgress));
-  // to lazily load library:
-  // checkout: https://dart.dev/language/libraries#lazily-loading-a-library
+
+  /// to lazily load library:
+  /// checkout: https://dart.dev/language/libraries#lazily-loading-a-library
   await initialization.loadLibrary();
   initialization
       .$initializeApp(
@@ -36,8 +42,8 @@ void main() => appZone(() async {
           ),
         ),
         onError: (error, stackTrace) async {
-          // to lazily load library:
-          // checkout: https://dart.dev/language/libraries#lazily-loading-a-library
+          /// to lazily load library:
+          /// checkout: https://dart.dev/language/libraries#lazily-loading-a-library
           await app_error.loadLibrary();
           runApp(app_error.AppError(error: error));
           ErrorUtil.logError(error, stackTrace).ignore();
