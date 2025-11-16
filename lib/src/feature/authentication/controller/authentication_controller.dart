@@ -43,12 +43,11 @@ final class AuthenticationController extends StateController<AuthenticationState
   final IAuthenticationRepository repository;
 
   void signIn() => handle(() async {
-    await Future.delayed(const Duration(seconds: 1));
     setState(AuthenticationState.authenticated(User.defaultUser()));
   });
 
   void logout() => handle(() async {
     if (state is! Authentication$AuthenticatedState) return;
-    setState(AuthenticationState.idle());
+    setState(const AuthenticationState.idle());
   });
 }
