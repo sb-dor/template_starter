@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-/* import 'package:database/database.dart'; */
-import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:flutter_template_name/src/common/util/error_util.dart';
 import 'package:flutter_template_name/src/feature/initialization/data/initialize_dependencies.dart';
+/* import 'package:database/database.dart'; */
+import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 
 /// Ephemerally initializes the app and prepares it for use.
 Future<Dependencies>? _$initializeApp;
@@ -25,7 +25,9 @@ Future<Dependencies> $initializeApp({
             DeviceOrientation.portraitDown,
           ]); */
     await _catchExceptions();
-    final dependencies = await $initializeDependencies(onProgress: onProgress).timeout(const Duration(minutes: 7));
+    final dependencies = await $initializeDependencies(
+      onProgress: onProgress,
+    ).timeout(const Duration(minutes: 7));
     await onSuccess?.call(dependencies);
     return dependencies;
   } on Object catch (error, stackTrace) {
@@ -54,7 +56,11 @@ Future<void> $disposeApp(Dependencies dependencies) async {}
 Future<void> _catchExceptions() async {
   try {
     PlatformDispatcher.instance.onError = (error, stackTrace) {
-      ErrorUtil.logError(error, stackTrace, hint: 'ROOT ERROR\r\n${Error.safeToString(error)}').ignore();
+      ErrorUtil.logError(
+        error,
+        stackTrace,
+        hint: 'ROOT ERROR\r\n${Error.safeToString(error)}',
+      ).ignore();
       return true;
     };
 

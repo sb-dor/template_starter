@@ -4,7 +4,12 @@ import 'package:flutter/widgets.dart';
 
 /// Measure and call callback after child size changed.
 class Sizer extends SingleChildRenderObjectWidget {
-  const Sizer({required super.child, this.onSizeChanged, this.dispatchNotification = false, super.key});
+  const Sizer({
+    required super.child,
+    this.onSizeChanged,
+    this.dispatchNotification = false,
+    super.key,
+  });
 
   /// Callback when child size changed and after layout rebuild.
   final void Function(Size size)? onSizeChanged;

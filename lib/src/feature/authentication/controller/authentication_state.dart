@@ -15,7 +15,8 @@ sealed class AuthenticationState extends _$AuthenticationStateBase {
 
   /// Processing
   /// {@macro authentication_state}
-  const factory AuthenticationState.processing({required User user, String message}) = AuthenticationState$Processing;
+  const factory AuthenticationState.processing({required User user, String message}) =
+      AuthenticationState$Processing;
 }
 
 /// Idling state

@@ -96,7 +96,9 @@ class _InputTextFieldState extends State<InputTextField> {
           expands: widget.multiline && widget.expands,
           autofillHints: widget.autofillHints,
           autocorrect: widget.autocorrect,
-          keyboardType: widget.keyboardType ?? (widget.multiline ? TextInputType.multiline : TextInputType.text),
+          keyboardType:
+              widget.keyboardType ??
+              (widget.multiline ? TextInputType.multiline : TextInputType.text),
           //style: ,
           inputFormatters: widget.inputFormatters,
           textInputAction: widget.textInputAction,

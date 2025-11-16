@@ -7,7 +7,6 @@ import 'package:flutter_template_name/src/common/widget/app.dart';
 import 'package:flutter_template_name/src/common/widget/app_error.dart' deferred as app_error;
 import 'package:flutter_template_name/src/feature/initialization/data/initialization.dart'
     deferred as initialization;
-import 'package:flutter_template_name/src/feature/initialization/widget/initialization_splash_screen.dart';
 import 'package:flutter_template_name/src/feature/settings/widget/settings_scope.dart';
 import 'package:octopus/octopus.dart';
 import 'package:platform_info/platform_info.dart';

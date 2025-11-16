@@ -1,27 +1,30 @@
 import 'dart:async';
 
 import 'package:control/control.dart';
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter_template_name/src/common/constant/config.dart';
 import 'package:flutter_template_name/src/common/constant/pubspec.yaml.g.dart';
 import 'package:flutter_template_name/src/common/controller/controller_observer.dart';
 import 'package:flutter_template_name/src/common/database/database.dart';
+import 'package:flutter_template_name/src/common/database/tables/log_table.dart';
 import 'package:flutter_template_name/src/common/model/app_metadata.dart';
-import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:flutter_template_name/src/common/util/api_client.dart';
 import 'package:flutter_template_name/src/common/util/log_buffer.dart';
 import 'package:flutter_template_name/src/common/util/middleware/logger_mw.dart';
 import 'package:flutter_template_name/src/common/util/screen_util.dart';
 import 'package:flutter_template_name/src/feature/authentication/controller/authentication_controller.dart';
 import 'package:flutter_template_name/src/feature/authentication/data/authentication_repository.dart';
-import 'package:flutter_template_name/src/feature/initialization/data/app_migrator.dart';
 import 'package:flutter_template_name/src/feature/initialization/data/platform/platform_initialization.dart';
+import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:l/l.dart';
 import 'package:platform_info/platform_info.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Initializes the app and returns a [Dependencies] object
-Future<Dependencies> $initializeDependencies({void Function(int progress, String message)? onProgress}) async {
+Future<Dependencies> $initializeDependencies({
+  void Function(int progress, String message)? onProgress,
+}) async {
   final dependencies = Dependencies();
   final totalSteps = _initializationSteps.length;
   var currentStep = 0;
@@ -68,14 +71,20 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
   'Restore settings': (_) {},
   'Initialize shared preferences': (dependencies) async =>
       dependencies.sharedPreferences = await SharedPreferences.getInstance(),
-  'Connect to database': (dependencies) =>
-      (dependencies.database = Config.inMemoryDatabase ? Database.memory() : Database.lazy()).refresh(),
+  'Connect to database': (dependencies) => dependencies.database = Config.inMemoryDatabase
+      ? AppDatabase.defaults(name: 'memory')
+      : AppDatabase.defaults(name: 'app_database'),
   'Shrink database': (dependencies) async {
     await dependencies.database.customStatement('VACUUM;');
     await dependencies.database.transaction(() async {
       final log =
-          await (dependencies.database.select<LogTbl, LogTblData>(dependencies.database.logTbl)
-                ..orderBy([(tbl) => OrderingTerm(expression: tbl.id, mode: OrderingMode.desc)])
+          await (dependencies.database.select<LogTbl, Log>(dependencies.database.logTbl)
+                ..orderBy([
+                  (tbl) => drift.OrderingTerm(
+                    expression: tbl.id as drift.Expression<Object>,
+                    mode: drift.OrderingMode.desc,
+                  ),
+                ])
                 ..limit(1, offset: 1000))
               .getSingleOrNull();
       if (log != null) {
@@ -86,7 +95,6 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
     });
     if (DateTime.now().second % 10 == 0) await dependencies.database.customStatement('VACUUM;');
   },
-  'Migrate app from previous version': (dependencies) => AppMigrator.migrate(dependencies.database),
   'API Client': (dependencies) => dependencies.apiClient = ApiClient(
     baseUrl: Config.apiBaseUrl,
     middlewares: [
@@ -106,8 +114,13 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
   'Restore last user': (dependencies) => dependencies.authenticationController.restore(),
   'Initialize localization': (_) {},
   'Collect logs': (dependencies) async {
-    await (dependencies.database.select<LogTbl, LogTblData>(dependencies.database.logTbl)
-          ..orderBy([(tbl) => OrderingTerm(expression: tbl.time, mode: OrderingMode.desc)])
+    await (dependencies.database.select<LogTbl, Log>(dependencies.database.logTbl)
+          ..orderBy([
+            (tbl) => drift.OrderingTerm(
+              expression: tbl.time as drift.Expression<Object>,
+              mode: drift.OrderingMode.desc,
+            ),
+          ])
           ..limit(LogBuffer.bufferLimit))
         .get()
         .then<List<LogMessage>>(
@@ -138,8 +151,8 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
           (log) => LogTblCompanion.insert(
             level: log.level.level,
             message: log.message.toString(),
-            time: Value<int>(log.timestamp.millisecondsSinceEpoch ~/ 1000),
-            stack: Value<String?>(switch (log) {
+            time: drift.Value<int>(log.timestamp.millisecondsSinceEpoch ~/ 1000),
+            stack: drift.Value<String?>(switch (log) {
               LogMessageError l => l.stackTrace.toString(),
               _ => null,
             }),
@@ -148,8 +161,9 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
         .bufferTime(const Duration(seconds: 5))
         .where((logs) => logs.isNotEmpty)
         .listen(
-          (logs) =>
-              dependencies.database.batch((batch) => batch.insertAll(dependencies.database.logTbl, logs)).ignore(),
+          (logs) => dependencies.database
+              .batch((batch) => batch.insertAll(dependencies.database.logTbl, logs))
+              .ignore(),
           cancelOnError: false,
         );
   },

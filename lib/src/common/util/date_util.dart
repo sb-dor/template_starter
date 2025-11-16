@@ -16,11 +16,13 @@ const JsonConverter<DateTime, String> dateTimeJsonConverter = DateTimeJsonCodec(
 String toJsonDateTime(DateTime value) => dateTimeJsonConverter.toJson(value);
 
 /// Convert a [DateTime] to a JSON value or return `null` if the value is `null`.
-String? toJsonDateTimeOrNull(DateTime? value) => value == null ? null : dateTimeJsonConverter.toJson(value);
+String? toJsonDateTimeOrNull(DateTime? value) =>
+    value == null ? null : dateTimeJsonConverter.toJson(value);
 
 /// Restore the [DateTime] from a JSON value.
 DateTime fromJsonDateTime(Object json) =>
-    fromJsonDateTimeOrNull(json) ?? (throw ArgumentError.value(json, 'json', 'Invalid DateTime value'));
+    fromJsonDateTimeOrNull(json) ??
+    (throw ArgumentError.value(json, 'json', 'Invalid DateTime value'));
 
 /// Restore the [DateTime] from a JSON value or return `null` if the value is `null`.
 DateTime? fromJsonDateTimeOrNull(Object? json) => switch (json) {
@@ -58,7 +60,8 @@ class DateTimeToJsonEncoder extends Converter<DateTime, String> {
   const DateTimeToJsonEncoder();
 
   @override
-  String convert(DateTime input) => input.isUtc ? input.toUtcIso8601String() : input.toLocalIso8601String();
+  String convert(DateTime input) =>
+      input.isUtc ? input.toUtcIso8601String() : input.toLocalIso8601String();
 }
 
 /// A [String] -> [DateTime] converter.

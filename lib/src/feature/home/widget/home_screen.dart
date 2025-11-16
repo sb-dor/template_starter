@@ -21,7 +21,10 @@ class HomeScreen extends StatelessWidget {
         const SliverFillRemaining(
           hasScrollBody: false,
           child: Center(
-            child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[Text('Home')]),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[Text('Home')],
+            ),
           ),
         ),
       ],

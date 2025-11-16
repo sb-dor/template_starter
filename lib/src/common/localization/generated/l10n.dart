@@ -119,7 +119,12 @@ class GeneratedLocalization {
 
   /// `An exception has occurred`
   String get anExceptionHasOccurred {
-    return Intl.message('An exception has occurred', name: 'anExceptionHasOccurred', desc: '', args: []);
+    return Intl.message(
+      'An exception has occurred',
+      name: 'anExceptionHasOccurred',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Please try again later.`
@@ -454,7 +459,12 @@ class GeneratedLocalization {
 
   /// `You will be logged out from your account`
   String get logOutDescription {
-    return Intl.message('You will be logged out from your account', name: 'logOutDescription', desc: '', args: []);
+    return Intl.message(
+      'You will be logged out from your account',
+      name: 'logOutDescription',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Current version`
@@ -514,7 +524,12 @@ class GeneratedLocalization {
 
   /// `Application information`
   String get applicationInformation {
-    return Intl.message('Application information', name: 'applicationInformation', desc: '', args: []);
+    return Intl.message(
+      'Application information',
+      name: 'applicationInformation',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Connected devices`

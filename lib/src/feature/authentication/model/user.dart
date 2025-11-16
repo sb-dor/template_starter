@@ -62,13 +62,15 @@ class UnauthenticatedUser extends User {
   }) => unauthenticated(this);
 
   @override
-  User copyWith({UserId? id}) => id != null ? AuthenticatedUser(id: id) : const UnauthenticatedUser();
+  User copyWith({UserId? id}) =>
+      id != null ? AuthenticatedUser(id: id) : const UnauthenticatedUser();
 
   @override
   int get hashCode => -1;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is UnauthenticatedUser && id == other.id;
+  bool operator ==(Object other) =>
+      identical(this, other) || other is UnauthenticatedUser && id == other.id;
 
   @override
   String toString() => 'UnauthenticatedUser{}';
@@ -115,7 +117,8 @@ final class AuthenticatedUser extends User {
   int get hashCode => id.hashCode;
 
   @override
-  bool operator ==(Object other) => identical(this, other) || other is AuthenticatedUser && id == other.id;
+  bool operator ==(Object other) =>
+      identical(this, other) || other is AuthenticatedUser && id == other.id;
 
   @override
   String toString() => 'AuthenticatedUser{id: $id}';

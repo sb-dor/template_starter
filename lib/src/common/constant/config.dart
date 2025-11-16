@@ -14,7 +14,10 @@ abstract final class Config {
 
   /// Base url for api.
   /// e.g. https://api.domain.tld
-  static const String apiBaseUrl = String.fromEnvironment('API_BASE_URL', defaultValue: 'https://api.domain.tld');
+  static const String apiBaseUrl = String.fromEnvironment(
+    'API_BASE_URL',
+    defaultValue: 'https://api.domain.tld',
+  );
 
   /// Timeout in milliseconds for opening url.
   /// [Dio] will throw the [DioException] with [DioExceptionType.connectTimeout] type when time out.
@@ -43,10 +46,16 @@ abstract final class Config {
 
   /// Database file name by default.
   /// e.g. sqlite means "sqlite.db" for native platforms and "sqlite" for web platform.
-  static const String databaseName = String.fromEnvironment('DATABASE_NAME', defaultValue: 'sqlite');
+  static const String databaseName = String.fromEnvironment(
+    'DATABASE_NAME',
+    defaultValue: 'sqlite',
+  );
 
   /// Whether to use in-memory database.
-  static const bool inMemoryDatabase = bool.fromEnvironment('IN_MEMORY_DATABASE', defaultValue: false);
+  static const bool inMemoryDatabase = bool.fromEnvironment(
+    'IN_MEMORY_DATABASE',
+    defaultValue: false,
+  );
 
   // --- AUTHENTICATION --- //
 
@@ -61,7 +70,10 @@ abstract final class Config {
   // --- LAYOUT --- //
 
   /// Maximum screen layout width for screen with list view.
-  static const int maxScreenLayoutWidth = int.fromEnvironment('MAX_LAYOUT_WIDTH', defaultValue: 768);
+  static const int maxScreenLayoutWidth = int.fromEnvironment(
+    'MAX_LAYOUT_WIDTH',
+    defaultValue: 768,
+  );
 
   // --- Key storage namespace --- //
 

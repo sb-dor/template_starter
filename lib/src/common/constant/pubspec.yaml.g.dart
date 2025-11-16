@@ -2,19 +2,18 @@
 // ignore_for_file: use_raw_strings, avoid_classes_with_only_static_members
 // ignore_for_file: avoid_escaping_inner_quotes, prefer_single_quotes
 
-/// GENERATED CODE - DO NOT MODIFY BY HAND
-
-library pubspec;
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
+// dart format off
+// coverage:ignore-file
 
 // *****************************************************************************
-// *                             pubspec_generator                             *
+// *                https://pub.dev/packages/pubspec_generator                 *
 // *****************************************************************************
 
 /*
 
   MIT License
-
-  Copyright (c) 2025 Plague Fox
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +50,7 @@ typedef PubspecVersion = ({
   int minor,
   int patch,
   List<String> preRelease,
-  List<String> build,
+  List<String> build
 });
 
 /// # The pubspec file
@@ -122,7 +121,16 @@ sealed class Pubspec {
   );
 
   /// Build date and time (UTC)
-  static final DateTime timestamp = DateTime.utc(2025, 2, 20, 13, 19, 26, 21, 187);
+  static final DateTime timestamp = DateTime.utc(
+    2025,
+    11,
+    16,
+    6,
+    56,
+    42,
+    8,
+    836,
+  );
 
   /// Name
   ///
@@ -177,7 +185,7 @@ sealed class Pubspec {
   /// Repository
   /// The optional repository field should contain the URL for your package’s
   /// source code repository—for example,
-  /// https://github.com/<user>/<repository>.
+  /// https://github.com/user/repository
   /// If you publish your package to the pub.dev site,
   /// then your package’s page displays the repository URL.
   /// While providing a repository is optional,
@@ -195,7 +203,7 @@ sealed class Pubspec {
   /// to each package’s issue tracker, using the value of this field.
   /// If issue_tracker is missing but repository is present and points to GitHub,
   /// then the pub.dev site uses the default issue tracker
-  /// (https://github.com/<user>/<repository>/issues).
+  /// https://github.com/user/repository/issues
   static const String issueTracker = r'';
 
   /// Documentation
@@ -339,8 +347,8 @@ sealed class Pubspec {
 
   /// Environment
   static const Map<String, String> environment = <String, String>{
-    'sdk': '>=3.7.0 <4.0.0',
-    'flutter': '>=3.7.0 <4.0.0',
+    'sdk': '^3.9.2',
+    'flutter': '^3.9.2',
   };
 
   /// Platforms
@@ -400,8 +408,12 @@ sealed class Pubspec {
   /// For more information,
   /// see [Package dependencies](https://dart.dev/tools/pub/dependencies).
   static const Map<String, Object> dependencies = <String, Object>{
-    'flutter': <String, Object>{'sdk': r'flutter'},
-    'flutter_localizations': <String, Object>{'sdk': r'flutter'},
+    'flutter': <String, Object>{
+      'sdk': r'flutter',
+    },
+    'flutter_localizations': <String, Object>{
+      'sdk': r'flutter',
+    },
     'intl': r'any',
     'octopus': r'^0.0.9',
     'meta': r'any',
@@ -416,25 +428,32 @@ sealed class Pubspec {
     'url_launcher': r'^6.3.1',
     'l': r'^5.0.0',
     'win32': r'^5.11.0',
-    'window_manager': r'^0.4.3',
+    'window_manager': r'^0.5.1',
     'control': r'^0.2.0',
     'shared_preferences': r'^2.5.2',
-    'drift': r'^2.25.1',
+    'drift': r'^2.28.2',
     'sqlite3_flutter_libs': r'^0.5.30',
     'http': r'^1.3.0',
     'cupertino_icons': r'^1.0.8',
     'web': r'^1.1.0',
-    'ui': <String, Object>{'path': r'./packages/ui'},
+    'ui': <String, Object>{
+      'path': r'./packages/ui',
+    },
+    'drift_flutter': r'^0.2.7',
   };
 
   /// Developer dependencies
   static const Map<String, Object> devDependencies = <String, Object>{
-    'flutter_test': <String, Object>{'sdk': r'flutter'},
-    'integration_test': <String, Object>{'sdk': r'flutter'},
-    'flutter_lints': r'^5.0.0',
+    'flutter_test': <String, Object>{
+      'sdk': r'flutter',
+    },
+    'integration_test': <String, Object>{
+      'sdk': r'flutter',
+    },
+    'flutter_lints': r'^6.0.0',
     'test': r'any',
-    'build_runner': r'^2.4.15',
-    'drift_dev': r'^2.25.2',
+    'build_runner': r'^2.5.4',
+    'drift_dev': r'^2.28.0',
     'pubspec_generator': r'^4.1.0-pre.1',
     'flutter_gen_runner': r'^5.9.0',
     'json_serializable': r'^6.9.4',
@@ -494,12 +513,18 @@ sealed class Pubspec {
     'dependencies': dependencies,
     'dev_dependencies': devDependencies,
     'dependency_overrides': dependencyOverrides,
-    'workspace': <Object>[r'packages/ui'],
+    'workspace': <Object>[
+      r'packages/ui',
+    ],
     'flutter': <String, Object>{
       'generate': true,
       'uses-material-design': true,
-      'shaders': <Object>[r'packages/ui/shaders/shimmer.frag'],
-      'assets': <Object>[r'assets/icons/'],
+      'shaders': <Object>[
+        r'packages/ui/shaders/shimmer.frag',
+      ],
+      'assets': <Object>[
+        r'assets/icons/',
+      ],
     },
     'flutter_intl': <String, Object>{
       'enabled': true,
@@ -509,6 +534,10 @@ sealed class Pubspec {
       'output_dir': r'lib/src/common/localization/generated',
       'use_deferred_loading': false,
     },
-    'flutter_gen': <String, Object>{'output': r'lib/src/common/constant/', 'line_length': 120},
+    'flutter_gen': <String, Object>{
+      'output': r'lib/src/common/constant/',
+      'line_length': 120,
+    },
   };
+
 }

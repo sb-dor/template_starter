@@ -40,7 +40,8 @@ class OutputTextField<T> extends StatelessWidget {
   final double? order;
 
   Widget focusOrder({required Widget child}) {
-    if (order case double value) return FocusTraversalOrder(order: NumericFocusOrder(value), child: child);
+    if (order case double value)
+      return FocusTraversalOrder(order: NumericFocusOrder(value), child: child);
     return child;
   }
 

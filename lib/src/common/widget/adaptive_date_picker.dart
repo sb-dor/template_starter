@@ -25,7 +25,8 @@ class AdaptiveDatePicker extends StatelessWidget {
   final ValueNotifier<DateTime?> controller;
 
   Widget focusOrder({required Widget child}) {
-    if (order case double value) return FocusTraversalOrder(order: NumericFocusOrder(value), child: child);
+    if (order case double value)
+      return FocusTraversalOrder(order: NumericFocusOrder(value), child: child);
     return child;
   }
 

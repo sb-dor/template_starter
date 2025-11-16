@@ -37,13 +37,25 @@ class SettingsScreen extends StatelessWidget {
                       children: <Widget>[
                         TextPlaceholder(height: 16, width: 64),
                         SizedBox(height: 12),
-                        Padding(padding: EdgeInsets.only(left: 8), child: TextPlaceholder(height: 14, width: 100)),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: TextPlaceholder(height: 14, width: 100),
+                        ),
                         SizedBox(height: 8),
-                        Padding(padding: EdgeInsets.only(left: 8), child: TextPlaceholder(height: 14, width: 128)),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: TextPlaceholder(height: 14, width: 128),
+                        ),
                         SizedBox(height: 8),
-                        Padding(padding: EdgeInsets.only(left: 8), child: TextPlaceholder(height: 14, width: 72)),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: TextPlaceholder(height: 14, width: 72),
+                        ),
                         SizedBox(height: 8),
-                        Padding(padding: EdgeInsets.only(left: 8), child: TextPlaceholder(height: 14, width: 92)),
+                        Padding(
+                          padding: EdgeInsets.only(left: 8),
+                          child: TextPlaceholder(height: 14, width: 92),
+                        ),
                       ],
                     ),
                   ],

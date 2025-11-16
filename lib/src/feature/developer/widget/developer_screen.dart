@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_template_name/src/common/constant/pubspec.yaml.g.dart';
 import 'package:flutter_template_name/src/common/localization/localization.dart';
-import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:flutter_template_name/src/common/widget/scaffold_padding.dart';
 import 'package:flutter_template_name/src/feature/developer/widget/logs_dialog.dart';
+import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:octopus/octopus.dart';
 import 'package:url_launcher/url_launcher_string.dart' as url_launcher;
 
@@ -20,12 +20,20 @@ class DeveloperScreen extends StatelessWidget {
     body: CustomScrollView(
       slivers: <Widget>[
         // --- App bar --- //
-        SliverAppBar(title: Text(Localization.of(context).developer), pinned: true, floating: true, snap: true),
+        SliverAppBar(
+          title: Text(Localization.of(context).developer),
+          pinned: true,
+          floating: true,
+          snap: true,
+        ),
 
         // --- Authentication --- //
         _GroupSeparator(title: Localization.of(context).authentication),
         const _OpenUriTile(title: 'Profile', description: 'Information about current user'),
-        const _OpenUriTile(title: 'Refresh session', description: 'Refresh current user\'s session'),
+        const _OpenUriTile(
+          title: 'Refresh session',
+          description: 'Refresh current user\'s session',
+        ),
         const _OpenUriTile(title: 'Logout', description: 'Logout current user'),
         SliverPadding(
           padding: ScaffoldPadding.of(context).copyWith(top: 16, bottom: 16),
@@ -51,8 +59,16 @@ class DeveloperScreen extends StatelessWidget {
 
         // --- Useful links --- //
         _GroupSeparator(title: Localization.of(context).usefulLinks),
-        const _OpenUriTile(title: 'Flutter', description: 'Flutter website', uri: 'https://flutter.dev'),
-        const _OpenUriTile(title: 'Flutter API', description: 'Framework API', uri: 'https://api.flutter.dev'),
+        const _OpenUriTile(
+          title: 'Flutter',
+          description: 'Flutter website',
+          uri: 'https://flutter.dev',
+        ),
+        const _OpenUriTile(
+          title: 'Flutter API',
+          description: 'Framework API',
+          uri: 'https://api.flutter.dev',
+        ),
         const _OpenUriTile(title: 'Portal', description: 'User portal'),
         const _OpenUriTile(title: 'Tasks', description: 'Tasks tracker'),
         const _OpenUriTile(title: 'Repository', description: 'Project repository'),
@@ -115,12 +131,21 @@ class _CopyTile extends StatelessWidget {
   Widget build(BuildContext context) => ListTile(
     title: Text(title),
     // Add QR code generation
-    subtitle: subtitle != null ? Text(subtitle!, maxLines: 1, overflow: TextOverflow.ellipsis) : null,
+    subtitle: subtitle != null
+        ? Text(subtitle!, maxLines: 1, overflow: TextOverflow.ellipsis)
+        : null,
     onTap: () {
-      Clipboard.setData(ClipboardData(text: content ?? (subtitle == null ? title : '$title: $subtitle')));
+      Clipboard.setData(
+        ClipboardData(text: content ?? (subtitle == null ? title : '$title: $subtitle')),
+      );
       ScaffoldMessenger.of(context)
         ..clearSnackBars()
-        ..showSnackBar(SnackBar(content: Text(Localization.of(context).copied), duration: const Duration(seconds: 3)));
+        ..showSnackBar(
+          SnackBar(
+            content: Text(Localization.of(context).copied),
+            duration: const Duration(seconds: 3),
+          ),
+        );
     },
   );
 }
@@ -134,12 +159,19 @@ class _ShowApplicationInfoTile extends StatelessWidget {
     sliver: SliverToBoxAdapter(
       child: ListTile(
         title: const Text('Application information'),
-        subtitle: const Text('Show information about the application.', maxLines: 1, overflow: TextOverflow.ellipsis),
+        subtitle: const Text(
+          'Show information about the application.',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         onTap: () => Octopus.of(context).showDialog<void>(
           (context) => AboutDialog(
             /* applicationName: pubspec.name, */
             applicationVersion: Pubspec.version.representation,
-            applicationIcon: const SizedBox.square(dimension: 64, child: Icon(Icons.apps, size: 64)),
+            applicationIcon: const SizedBox.square(
+              dimension: 64,
+              child: Icon(Icons.apps, size: 64),
+            ),
             children: <Widget>[
               const _CopyTile(title: 'Name', subtitle: Pubspec.name, content: Pubspec.name),
               _CopyTile(
@@ -147,9 +179,21 @@ class _ShowApplicationInfoTile extends StatelessWidget {
                 subtitle: Pubspec.version.representation,
                 content: Pubspec.version.representation,
               ),
-              const _CopyTile(title: 'Description', subtitle: Pubspec.description, content: Pubspec.description),
-              const _CopyTile(title: 'Homepage', subtitle: Pubspec.homepage, content: Pubspec.homepage),
-              const _CopyTile(title: 'Repository', subtitle: Pubspec.repository, content: Pubspec.repository),
+              const _CopyTile(
+                title: 'Description',
+                subtitle: Pubspec.description,
+                content: Pubspec.description,
+              ),
+              const _CopyTile(
+                title: 'Homepage',
+                subtitle: Pubspec.homepage,
+                content: Pubspec.homepage,
+              ),
+              const _CopyTile(
+                title: 'Repository',
+                subtitle: Pubspec.repository,
+                content: Pubspec.repository,
+              ),
             ],
           ),
         ),
@@ -205,7 +249,10 @@ class _ShowApplicationDependenciesTile extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    const Text('Dependencies', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    const Text(
+                      'Dependencies',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 16),
                     Wrap(
                       children: <Widget>[
@@ -237,7 +284,11 @@ class _ShowApplicationDevDependenciesTile extends StatelessWidget {
     sliver: SliverToBoxAdapter(
       child: ListTile(
         title: const Text('Dev Dependencies'),
-        subtitle: const Text('Show developers dependencies.', maxLines: 1, overflow: TextOverflow.ellipsis),
+        subtitle: const Text(
+          'Show developers dependencies.',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         onTap: () => Octopus.of(context).showDialog<void>(
           (context) => Dialog(
             insetPadding: const EdgeInsets.all(64),
@@ -249,7 +300,10 @@ class _ShowApplicationDevDependenciesTile extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    const Text('Dev Dependencies', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    const Text(
+                      'Dev Dependencies',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
                     const SizedBox(height: 16),
                     Wrap(
                       children: <Widget>[
@@ -297,7 +351,11 @@ class _ResetNavigationTile extends StatelessWidget {
     sliver: SliverToBoxAdapter(
       child: ListTile(
         title: const Text('Reset navigation'),
-        subtitle: const Text('Reset navigation stack.', maxLines: 1, overflow: TextOverflow.ellipsis),
+        subtitle: const Text(
+          'Reset navigation stack.',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         onTap: () => Octopus.of(context).popAll(),
       ),
     ),
@@ -337,7 +395,11 @@ class _ClearDatabaseTile extends StatelessWidget {
     sliver: SliverToBoxAdapter(
       child: ListTile(
         title: const Text('Drop database'),
-        subtitle: const Text('Clear database content.', maxLines: 1, overflow: TextOverflow.ellipsis),
+        subtitle: const Text(
+          'Clear database content.',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         onTap: () {
           final db = Dependencies.of(context).database;
           final messenger = ScaffoldMessenger.maybeOf(context);
@@ -347,14 +409,18 @@ class _ClearDatabaseTile extends StatelessWidget {
               try {
                 await db.batch((batch) {
                   // ignore: prefer_foreach
-                  for (final table in db.allTables) batch.deleteAll(table);
+                  for (final table in db.allTables) {
+                    batch.deleteAll(table);
+                  }
                 });
               } finally {
                 await db.customStatement('PRAGMA foreign_keys = ON');
               }
               messenger
                 ?..clearSnackBars()
-                ..showSnackBar(const SnackBar(content: Text('Database cleared'), duration: Duration(seconds: 3)));
+                ..showSnackBar(
+                  const SnackBar(content: Text('Database cleared'), duration: Duration(seconds: 3)),
+                );
             } on Object catch (error) {
               messenger
                 ?..clearSnackBars()

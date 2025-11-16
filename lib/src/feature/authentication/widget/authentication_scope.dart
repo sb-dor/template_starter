@@ -1,9 +1,9 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:flutter_template_name/src/feature/authentication/controller/authentication_controller.dart';
 import 'package:flutter_template_name/src/feature/authentication/controller/authentication_state.dart';
 import 'package:flutter_template_name/src/feature/authentication/model/sign_in_data.dart';
 import 'package:flutter_template_name/src/feature/authentication/model/user.dart';
+import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 
 /// {@template authentication_scope}
 /// AuthenticationScope widget.
@@ -28,7 +28,8 @@ class AuthenticationScope extends StatefulWidget {
       _InheritedAuthenticationScope.of(context, listen: false).signIn(data);
 
   /// Sign-Out
-  static void signOut(BuildContext context) => _InheritedAuthenticationScope.of(context, listen: false).signOut();
+  static void signOut(BuildContext context) =>
+      _InheritedAuthenticationScope.of(context, listen: false).signOut();
 
   @override
   State<AuthenticationScope> createState() => _AuthenticationScopeState();
@@ -57,13 +58,20 @@ class _AuthenticationScopeState extends State<AuthenticationScope> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      _InheritedAuthenticationScope(controller: controller, state: controller.state, child: widget.child);
+  Widget build(BuildContext context) => _InheritedAuthenticationScope(
+    controller: controller,
+    state: controller.state,
+    child: widget.child,
+  );
 }
 
 /// Inherited widget for quick access in the element tree.
 class _InheritedAuthenticationScope extends InheritedWidget {
-  const _InheritedAuthenticationScope({required this.controller, required this.state, required super.child});
+  const _InheritedAuthenticationScope({
+    required this.controller,
+    required this.state,
+    required super.child,
+  });
 
   final AuthenticationController controller;
   final AuthenticationState state;
@@ -84,5 +92,6 @@ class _InheritedAuthenticationScope extends InheritedWidget {
       maybeOf(context, listen: listen) ?? _notFoundInheritedWidgetOfExactType();
 
   @override
-  bool updateShouldNotify(covariant _InheritedAuthenticationScope oldWidget) => !identical(oldWidget.state, state);
+  bool updateShouldNotify(covariant _InheritedAuthenticationScope oldWidget) =>
+      !identical(oldWidget.state, state);
 }

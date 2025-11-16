@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart' show State, StatefulWidget, ValueNotifier;
-import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:flutter_template_name/src/common/router/authentication_guard.dart';
 import 'package:flutter_template_name/src/common/router/home_guard.dart';
 import 'package:flutter_template_name/src/common/router/routes.dart';
+import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:octopus/octopus.dart';
 
 mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
@@ -38,10 +38,11 @@ mixin RouterStateMixin<T extends StatefulWidget> on State<T> {
         // Home route should be always on top.
         HomeGuard(),
       ],
-      onError: (error, stackTrace) => errorsObserver.value = <({Object error, StackTrace stackTrace})>[
-        (error: error, stackTrace: stackTrace),
-        ...errorsObserver.value,
-      ],
+      onError: (error, stackTrace) =>
+          errorsObserver.value = <({Object error, StackTrace stackTrace})>[
+            (error: error, stackTrace: stackTrace),
+            ...errorsObserver.value,
+          ],
       /* observers: <NavigatorObserver>[
         HeroController(),
       ], */

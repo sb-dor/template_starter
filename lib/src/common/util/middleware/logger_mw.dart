@@ -5,7 +5,11 @@ import 'package:meta/meta.dart';
 
 @immutable
 class ApiClient$LoggerMiddleware {
-  const ApiClient$LoggerMiddleware({this.logRequest = false, this.logResponse = true, this.logError = true});
+  const ApiClient$LoggerMiddleware({
+    this.logRequest = false,
+    this.logResponse = true,
+    this.logError = true,
+  });
 
   final bool logRequest;
   final bool logResponse;
@@ -15,7 +19,12 @@ class ApiClient$LoggerMiddleware {
     final stopwatch = Stopwatch()..start();
     try {
       if (logRequest) {
-        developer.log('[${request.method}] ${request.url.path}', name: 'http', time: DateTime.now(), level: 300);
+        developer.log(
+          '[${request.method}] ${request.url.path}',
+          name: 'http',
+          time: DateTime.now(),
+          level: 300,
+        );
       }
       final response = await innerHandler(request, context);
       if (logResponse) {

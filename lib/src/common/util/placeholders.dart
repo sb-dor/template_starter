@@ -19,7 +19,10 @@ String generateSentence([int min = 2, int max = 8]) =>
             final word = generateWord();
             return '${word[0].toUpperCase()}${word.substring(1)}';
           }())
-          ..writeAll(List<String>.generate(_$rnd.nextInt(max - min + 1) + min, (_) => generateWord()), _$nbsp)
+          ..writeAll(
+            List<String>.generate(_$rnd.nextInt(max - min + 1) + min, (_) => generateWord()),
+            _$nbsp,
+          )
           ..write('.'))
         .toString();
 

@@ -49,7 +49,9 @@ class _HistoryButtonState extends State<HistoryButton> {
           alignment: Alignment.topCenter,
           child: Card(
             elevation: 8,
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+            ),
             child: _HistorySearchWidget(controller: controller),
           ),
         ),
@@ -106,7 +108,10 @@ class _HistorySearchWidgetState extends State<_HistorySearchWidget> {
   void _select(OctopusHistoryEntry entry) {
     final router = context.octopus;
     _pop();
-    Future<void>.delayed(const Duration(milliseconds: 250), () => router.setState((_) => entry.state));
+    Future<void>.delayed(
+      const Duration(milliseconds: 250),
+      () => router.setState((_) => entry.state),
+    );
   }
 
   void _pop() {
@@ -171,7 +176,9 @@ class _HistorySearchWidgetState extends State<_HistorySearchWidget> {
             children: <Widget>[
               for (final entry in _filtered)
                 ListTile(
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                  ),
                   title: Text(
                     entry.$1 ?? 'Octopus',
                     maxLines: 1,

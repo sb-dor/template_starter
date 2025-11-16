@@ -15,7 +15,9 @@ class SignUpScreen extends StatelessWidget {
       child: Center(
         child: LayoutBuilder(
           builder: (context, constraints) => SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: math.max(16, (constraints.maxWidth - 620) / 2)),
+            padding: EdgeInsets.symmetric(
+              horizontal: math.max(16, (constraints.maxWidth - 620) / 2),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -32,7 +34,10 @@ class SignUpScreen extends StatelessWidget {
                 const SizedBox(height: 32),
                 const FormPlaceholder(),
                 const SizedBox(height: 32),
-                SizedBox(height: 48, child: _SignUpScreen$Buttons(cancel: () => Navigator.pop(context), signUp: null)),
+                SizedBox(
+                  height: 48,
+                  child: _SignUpScreen$Buttons(cancel: () => Navigator.pop(context), signUp: null),
+                ),
               ],
             ),
           ),

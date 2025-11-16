@@ -38,7 +38,10 @@ final class ControllerObserver implements IControllerObserver {
       l.d('StateController | ${controller.name} | $prevState -> $nextState');
     } else {
       // State change occurred inside the handler
-      l.d('StateController | ${controller.name}.${context.name} | $prevState -> $nextState', context.meta);
+      l.d(
+        'StateController | ${controller.name}.${context.name} | $prevState -> $nextState',
+        context.meta,
+      );
     }
   }
 

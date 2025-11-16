@@ -29,7 +29,7 @@ class Dependencies {
   late final SharedPreferences sharedPreferences;
 
   /// Database
-  late final Database database;
+  late final AppDatabase database;
 
   /// API Client
   late final ApiClient apiClient;

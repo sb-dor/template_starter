@@ -1,8 +1,8 @@
+import 'package:drift/drift.dart' as drift;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_template_name/src/common/database/database.dart' as db;
-import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:flutter_template_name/src/common/util/date_util.dart';
+import 'package:flutter_template_name/src/feature/initialization/models/dependencies.dart';
 import 'package:l/l.dart';
 import 'package:octopus/octopus.dart';
 
@@ -43,9 +43,11 @@ class _LogsListState extends State<_LogsList> {
     super.initState();
     final database = Dependencies.of(context).database;
     Future<void>(() async {
-      final rows = await (database.select(
-        database.logTbl,
-      )..orderBy([(tbl) => db.OrderingTerm(expression: tbl.time, mode: db.OrderingMode.desc)])).get();
+      final rows =
+          await (database.select(database.logTbl)..orderBy([
+                (tbl) => drift.OrderingTerm(expression: tbl.time, mode: drift.OrderingMode.desc),
+              ]))
+              .get();
       logs = rows
           .map(
             (l) => l.stack != null
@@ -132,7 +134,8 @@ class _LogsListState extends State<_LogsList> {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => _LogTile(filteredLogs[index], key: ObjectKey(filteredLogs[index])),
+                (context, index) =>
+                    _LogTile(filteredLogs[index], key: ObjectKey(filteredLogs[index])),
                 childCount: filteredLogs.length,
               ),
             ),

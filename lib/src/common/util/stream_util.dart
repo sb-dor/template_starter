@@ -42,7 +42,9 @@ class _RelieveStreamTransformer<T> extends StreamTransformerBase<T, T> {
 
   @override
   Stream<T> bind(Stream<T> stream) {
-    final controller = stream.isBroadcast ? StreamController<T>.broadcast(sync: true) : StreamController<T>(sync: true);
+    final controller = stream.isBroadcast
+        ? StreamController<T>.broadcast(sync: true)
+        : StreamController<T>(sync: true);
     return (controller..onListen = () => _onListen(stream, controller)).stream;
   }
 
@@ -136,23 +138,24 @@ class Chunker extends StreamTransformerBase<List<int>, td.Uint8List> {
       });
   }
 
-  void Function(List<int> data) _$onData(td.BytesBuilder bytes, StreamSink<td.Uint8List> sink) => (data) {
-    try {
-      final dataLength = data.length;
-      for (var offset = 0; offset < data.length; offset += chunkSize) {
-        final end = math.min<int>(offset + chunkSize, dataLength);
-        final to = math.min<int>(end, offset + chunkSize - bytes.length);
-        bytes.add(data.sublist(offset, to));
-        if (to != end) {
-          sink.add(bytes.takeBytes());
-          bytes.add(data.sublist(to, end));
+  void Function(List<int> data) _$onData(td.BytesBuilder bytes, StreamSink<td.Uint8List> sink) =>
+      (data) {
+        try {
+          final dataLength = data.length;
+          for (var offset = 0; offset < data.length; offset += chunkSize) {
+            final end = math.min<int>(offset + chunkSize, dataLength);
+            final to = math.min<int>(end, offset + chunkSize - bytes.length);
+            bytes.add(data.sublist(offset, to));
+            if (to != end) {
+              sink.add(bytes.takeBytes());
+              bytes.add(data.sublist(to, end));
+            }
+            if (bytes.length == chunkSize) {
+              sink.add(bytes.takeBytes());
+            }
+          }
+        } on Object catch (error, stackTrace) {
+          sink.addError(error, stackTrace);
         }
-        if (bytes.length == chunkSize) {
-          sink.add(bytes.takeBytes());
-        }
-      }
-    } on Object catch (error, stackTrace) {
-      sink.addError(error, stackTrace);
-    }
-  };
+      };
 }

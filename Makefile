@@ -30,7 +30,7 @@ doctor: ## Check flutter doctor
 
 .PHONY: format
 format: ## Format the code
-	@dart format -l 120 lib/ test/
+	@dart format -l 100 lib/ test/
 
 .PHONY: fmt
 fmt: format
@@ -129,6 +129,12 @@ protobuf: ## Generate protobuf
 .PHONY: generate
 generate: get l10n format fluttergen ## Generate the code
 	@dart run build_runner build --delete-conflicting-outputs --release
+
+
+.PHONY: generate
+generate-dev: get l10n format fluttergen ## Generate the code
+	@dart run build_runner watch --delete-conflicting-outputs --release
+
 
 .PHONY: gen
 gen: generate

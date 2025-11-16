@@ -12,16 +12,20 @@ class _KeyboardObserver$JS with _IsKeyPressed$JS, ChangeNotifier implements IKey
       isKeyPressed(LogicalKeyboardKey.controlLeft) || isKeyPressed(LogicalKeyboardKey.controlRight);
 
   @override
-  bool get isShiftPressed => isKeyPressed(LogicalKeyboardKey.shiftLeft) || isKeyPressed(LogicalKeyboardKey.shiftRight);
+  bool get isShiftPressed =>
+      isKeyPressed(LogicalKeyboardKey.shiftLeft) || isKeyPressed(LogicalKeyboardKey.shiftRight);
 
   @override
-  bool get isAltPressed => isKeyPressed(LogicalKeyboardKey.altLeft) || isKeyPressed(LogicalKeyboardKey.altRight);
+  bool get isAltPressed =>
+      isKeyPressed(LogicalKeyboardKey.altLeft) || isKeyPressed(LogicalKeyboardKey.altRight);
 
   @override
-  bool get isMetaPressed => isKeyPressed(LogicalKeyboardKey.metaLeft) || isKeyPressed(LogicalKeyboardKey.metaRight);
+  bool get isMetaPressed =>
+      isKeyPressed(LogicalKeyboardKey.metaLeft) || isKeyPressed(LogicalKeyboardKey.metaRight);
 }
 
 mixin _IsKeyPressed$JS {
   /// Returns true if the given [KeyboardKey] is pressed.
-  bool isKeyPressed(LogicalKeyboardKey key) => HardwareKeyboard.instance.logicalKeysPressed.contains(key);
+  bool isKeyPressed(LogicalKeyboardKey key) =>
+      HardwareKeyboard.instance.logicalKeysPressed.contains(key);
 }

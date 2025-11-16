@@ -7,7 +7,8 @@ import 'package:http/http.dart' as http_package;
 
 /// A function that takes a [http_package.BaseRequest] and returns a [http_package.StreamedResponse].
 /// The [context] parameter is a map that can be used to store data that should be available to all middleware.
-typedef ApiClientHandler = Future<APIClientResponse> Function(APIClientRequest request, Map<String, Object?> context);
+typedef ApiClientHandler =
+    Future<APIClientResponse> Function(APIClientRequest request, Map<String, Object?> context);
 
 /// A function that takes a [ApiClientHandler] and returns a [ApiClientHandler].
 typedef ApiClientMiddleware = ApiClientHandler Function(ApiClientHandler innerHandler);
@@ -18,7 +19,8 @@ extension type ApiClientMiddlewareWrapper._(ApiClientMiddleware _fn) {
   factory ApiClientMiddlewareWrapper({
     Future<void> Function(APIClientRequest request, Map<String, Object?> context)? onRequest,
     Future<void> Function(APIClientResponse response, Map<String, Object?> context)? onResponse,
-    Future<void> Function(Object error, StackTrace stackTrace, Map<String, Object?> context)? onError,
+    Future<void> Function(Object error, StackTrace stackTrace, Map<String, Object?> context)?
+    onError,
   }) => ApiClientMiddlewareWrapper._(
     (innerHandler) => (request, context) async {
       await onRequest?.call(request, context);
@@ -34,18 +36,21 @@ extension type ApiClientMiddlewareWrapper._(ApiClientMiddleware _fn) {
   );
 
   /// Merges the given [middlewares] into a single [ApiClientMiddleware].
-  factory ApiClientMiddlewareWrapper.merge(List<ApiClientMiddleware> middlewares) => ApiClientMiddlewareWrapper._(
-    middlewares.length == 1
-        ? middlewares.single
-        : (handler) => middlewares.reversed.fold(handler, (handler, middleware) => middleware(handler)),
-  );
+  factory ApiClientMiddlewareWrapper.merge(List<ApiClientMiddleware> middlewares) =>
+      ApiClientMiddlewareWrapper._(
+        middlewares.length == 1
+            ? middlewares.single
+            : (handler) =>
+                  middlewares.reversed.fold(handler, (handler, middleware) => middleware(handler)),
+      );
 
   /// Call the wrapped [ApiClientMiddleware] with the given [innerHandler].
   ApiClientHandler call(ApiClientHandler innerHandler) => _fn(innerHandler);
 }
 
 /// An HTTP request with a JSON-encoded body.
-extension type APIClientRequest(http_package.BaseRequest _request) implements http_package.BaseRequest {}
+extension type APIClientRequest(http_package.BaseRequest _request)
+    implements http_package.BaseRequest {}
 
 /// An HTTP response with a JSON-encoded body.
 final class APIClientResponse {
@@ -76,9 +81,14 @@ final class APIClientResponse {
 /// An HTTP client that sends requests to a REST API.
 /// {@endtemplate}
 class ApiClient /* with http_package.BaseClient implements http_package.Client */ {
-  ApiClient({required String baseUrl, http_package.Client? client, Iterable<ApiClientMiddleware>? middlewares})
-    : _baseUrl = Uri.parse(baseUrl.endsWith('/') ? baseUrl.substring(0, baseUrl.length - 1) : baseUrl),
-      assert(!baseUrl.endsWith('//'), 'Invalid base URL.') {
+  ApiClient({
+    required String baseUrl,
+    http_package.Client? client,
+    Iterable<ApiClientMiddleware>? middlewares,
+  }) : _baseUrl = Uri.parse(
+         baseUrl.endsWith('/') ? baseUrl.substring(0, baseUrl.length - 1) : baseUrl,
+       ),
+       assert(!baseUrl.endsWith('//'), 'Invalid base URL.') {
     // Create the HTTP client.
     final internalClient = client ?? http_package.Client();
 
@@ -141,19 +151,25 @@ class ApiClient /* with http_package.BaseClient implements http_package.Client *
   );
 
   /// Sends a POST request to the given [path].
-  Future<APIClientResponse> post(String path, {Map<String, String>? headers, Map<String, Object?>? body}) =>
-      _sendUnstreamed(
-        handler: _handler,
-        method: 'POST',
-        url: _mergePath(_baseUrl, path),
-        headers: headers,
-        body: body,
-        context: <String, Object?>{},
-      );
+  Future<APIClientResponse> post(
+    String path, {
+    Map<String, String>? headers,
+    Map<String, Object?>? body,
+  }) => _sendUnstreamed(
+    handler: _handler,
+    method: 'POST',
+    url: _mergePath(_baseUrl, path),
+    headers: headers,
+    body: body,
+    context: <String, Object?>{},
+  );
 }
 
 /// Creates a new [ApiClientHandler] from the given [internalClient] and [middleware].
-ApiClientHandler _createHandler(http_package.Client internalClient, ApiClientMiddleware middleware) {
+ApiClientHandler _createHandler(
+  http_package.Client internalClient,
+  ApiClientMiddleware middleware,
+) {
   // Check if the completer is completed and throw an error if it is.
   void throwError(Completer<APIClientResponse> completer, Object error, StackTrace stackTrace) {
     if (completer.isCompleted)
@@ -174,7 +190,9 @@ ApiClientHandler _createHandler(http_package.Client internalClient, ApiClientMid
   }
 
   // JSON decoder.
-  final jsonDecoder = const Utf8Decoder().fuse(const JsonDecoder()).cast<Object?, Map<String, Object?>>();
+  final jsonDecoder = const Utf8Decoder()
+      .fuse(const JsonDecoder())
+      .cast<Object?, Map<String, Object?>>();
 
   // HTTP handler.
   Future<APIClientResponse> httpHandler(APIClientRequest request, Map<String, Object?> context) {

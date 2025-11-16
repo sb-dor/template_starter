@@ -25,7 +25,10 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> with _UsernamePasswordFormStateMixin {
   final FocusNode _usernameFocusNode = FocusNode();
   final FocusNode _passwordFocusNode = FocusNode();
-  late final Listenable _formChangedNotifier = Listenable.merge([_usernameController, _passwordController]);
+  late final Listenable _formChangedNotifier = Listenable.merge([
+    _usernameController,
+    _passwordController,
+  ]);
   final _usernameFormatters = <TextInputFormatter>[
     FilteringTextInputFormatter.allow(
       /// Allow only letters, numbers,
@@ -42,7 +45,9 @@ class _SignInScreenState extends State<SignInScreen> with _UsernamePasswordFormS
       child: Center(
         child: LayoutBuilder(
           builder: (context, constraints) => SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: math.max(16, (constraints.maxWidth - 620) / 2)),
+            padding: EdgeInsets.symmetric(
+              horizontal: math.max(16, (constraints.maxWidth - 620) / 2),
+            ),
             child: StateConsumer<AuthenticationController, AuthenticationState>(
               controller: _authenticationController,
               buildWhen: (previous, current) => previous != current,
@@ -140,12 +145,18 @@ class _SignInScreenState extends State<SignInScreen> with _UsernamePasswordFormS
                         final formFilled =
                             _usernameController.text.length > 3 &&
                             _passwordController.text.length >= Config.passwordMinLength;
-                        final signInCallback = state.isIdling && formFilled ? () => signIn(context) : null;
+                        final signInCallback = state.isIdling && formFilled
+                            ? () => signIn(context)
+                            : null;
                         final signUpCallback = state.isIdling ? () => signUp(context) : null;
                         final key = ValueKey<int>(
                           (signInCallback == null ? 0 : 1 << 1) | (signUpCallback == null ? 0 : 1),
                         );
-                        return _SignInScreen$Buttons(signIn: signInCallback, signUp: signUpCallback, key: key);
+                        return _SignInScreen$Buttons(
+                          signIn: signInCallback,
+                          signUp: signUpCallback,
+                          key: key,
+                        );
                       },
                     ),
                   ),
@@ -215,7 +226,8 @@ mixin _UsernamePasswordFormStateMixin on State<SignInScreen> {
   }
 
   static String? _passwordValidator(String password) {
-    const passwordMinLength = Config.passwordMinLength, passwordMaxLength = Config.passwordMaxLength;
+    const passwordMinLength = Config.passwordMinLength,
+        passwordMaxLength = Config.passwordMaxLength;
     final length = switch (password.length) {
       0 => 'Password is required.',
       < passwordMinLength => 'Password must be 8 characters or more.',
@@ -266,7 +278,8 @@ mixin _UsernamePasswordFormStateMixin on State<SignInScreen> {
     const numbers = '0123456789';
     const chars = lower + upper + numbers;
     final rnd = math.Random();
-    final length = rnd.nextInt(Config.passwordMaxLength - Config.passwordMinLength) + Config.passwordMinLength;
+    final length =
+        rnd.nextInt(Config.passwordMaxLength - Config.passwordMinLength) + Config.passwordMinLength;
     final password = <int>[
       lower.codeUnitAt(rnd.nextInt(lower.length)),
       upper.codeUnitAt(rnd.nextInt(upper.length)),

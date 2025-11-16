@@ -15,7 +15,8 @@ abstract interface class IAuthenticationRepository {
 }
 
 class AuthenticationRepositoryImpl implements IAuthenticationRepository {
-  AuthenticationRepositoryImpl({required SharedPreferences sharedPreferences}) : _sharedPreferences = sharedPreferences;
+  AuthenticationRepositoryImpl({required SharedPreferences sharedPreferences})
+    : _sharedPreferences = sharedPreferences;
 
   static const String _sessionKey = 'authentication.session';
   final SharedPreferences _sharedPreferences;
@@ -58,7 +59,8 @@ class AuthenticationRepositoryImpl implements IAuthenticationRepository {
 
 @visibleForTesting
 class AuthenticationRepositoryFake implements IAuthenticationRepository {
-  AuthenticationRepositoryFake({Map<String, Object?>? store}) : _store = store ?? <String, Object?>{};
+  AuthenticationRepositoryFake({Map<String, Object?>? store})
+    : _store = store ?? <String, Object?>{};
 
   static const String _sessionKey = 'authentication.session';
   final Map<String, Object?> _store;

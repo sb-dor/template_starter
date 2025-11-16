@@ -46,7 +46,8 @@ final class TestScreenController<W extends Widget> {
   void setSize(Size size) => _size.value = size;
 
   /// Changes the device pixel ratio of the screen.
-  void setDevicePixelRatio(double devicePixelRatio) => _flutterView.devicePixelRatio = devicePixelRatio;
+  void setDevicePixelRatio(double devicePixelRatio) =>
+      _flutterView.devicePixelRatio = devicePixelRatio;
 
   /// The [NavigatorState] of the current app.
   NavigatorState? get navigator => _navigatorObserver.navigator;

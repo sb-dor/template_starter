@@ -11,7 +11,9 @@ class SettingsDialog extends StatelessWidget {
   Widget build(BuildContext context) => AlertDialog.adaptive(
     title: const Text('Settings'),
     content: const Text('Coming soon...'),
-    actions: <Widget>[TextButton(onPressed: () => Navigator.maybePop(context), child: const Text('Close'))],
+    actions: <Widget>[
+      TextButton(onPressed: () => Navigator.maybePop(context), child: const Text('Close')),
+    ],
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
   );
 }

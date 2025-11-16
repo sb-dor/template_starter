@@ -77,7 +77,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "localeCode": MessageLookupByLibrary.simpleMessage("en_US"),
     "logInButton": MessageLookupByLibrary.simpleMessage("Log In"),
     "logOutButton": MessageLookupByLibrary.simpleMessage("Log Out"),
-    "logOutDescription": MessageLookupByLibrary.simpleMessage("You will be logged out from your account"),
+    "logOutDescription": MessageLookupByLibrary.simpleMessage(
+      "You will be logged out from your account",
+    ),
     "moveButton": MessageLookupByLibrary.simpleMessage("Move"),
     "moveToTrashButton": MessageLookupByLibrary.simpleMessage("Move to trash"),
     "name": MessageLookupByLibrary.simpleMessage("Name"),

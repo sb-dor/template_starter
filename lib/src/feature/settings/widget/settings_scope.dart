@@ -47,7 +47,8 @@ class _SettingsScopeState extends State<SettingsScope> {
   /* #endregion */
 
   @override
-  Widget build(BuildContext context) => _InheritedSettingsScope(scope: this, theme: _theme, child: widget.child);
+  Widget build(BuildContext context) =>
+      _InheritedSettingsScope(scope: this, theme: _theme, child: widget.child);
 }
 
 /// Inherited widget for quick access in the element tree.
@@ -77,7 +78,8 @@ class _InheritedSettingsScope extends InheritedWidget {
       maybeOf(context, listen: listen) ?? _notFoundInheritedWidgetOfExactType();
 
   @override
-  bool updateShouldNotify(covariant _InheritedSettingsScope oldWidget) => !identical(oldWidget.theme, theme);
+  bool updateShouldNotify(covariant _InheritedSettingsScope oldWidget) =>
+      !identical(oldWidget.theme, theme);
 }
 
 ThemeData _$buildTheme(ThemeData theme) {

@@ -38,7 +38,9 @@ extension ScreenUtilExtension on BuildContext {
     final ScreenSizeWhenResult Function()? phone,
     final ScreenSizeWhenResult Function()? tablet,
     final ScreenSizeWhenResult Function()? desktop,
-  }) => ScreenUtil.screenSizeOf(this).maybeWhen(phone: phone, tablet: tablet, desktop: desktop, orElse: orElse);
+  }) => ScreenUtil.screenSizeOf(
+    this,
+  ).maybeWhen(phone: phone, tablet: tablet, desktop: desktop, orElse: orElse);
 }
 
 /// {@template screen_util}
@@ -137,7 +139,11 @@ sealed class ScreenSize {
     final ScreenSizeWhenResult Function()? phone,
     final ScreenSizeWhenResult Function()? tablet,
     final ScreenSizeWhenResult Function()? desktop,
-  }) => when<ScreenSizeWhenResult>(phone: phone ?? orElse, tablet: tablet ?? orElse, desktop: desktop ?? orElse);
+  }) => when<ScreenSizeWhenResult>(
+    phone: phone ?? orElse,
+    tablet: tablet ?? orElse,
+    desktop: desktop ?? orElse,
+  );
 
   @override
   String toString() => representation;
