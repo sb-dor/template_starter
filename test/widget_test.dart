@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_project/src/common/widget/app.dart';
+import 'package:flutter_project/src/feature/initialization/widget/app.dart';
 import 'package:flutter_project/src/feature/authentication/controller/authentication_controller.dart';
 import 'package:flutter_project/src/feature/authentication/data/authentication_repository.dart';
 import 'package:flutter_project/src/feature/initialization/models/dependencies.dart';

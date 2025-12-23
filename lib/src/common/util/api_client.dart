@@ -4,9 +4,12 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http_package;
+import 'package:l/l.dart';
+
+const successStatusCodes = <int>[200, 201, 202, 203, 204];
 
 /// A function that takes a [http_package.BaseRequest] and returns a [http_package.StreamedResponse].
-/// The [context] parameter is a map that can be used to store data that should be available to all middleware.
+/// The [context] parameter is a map that can be used to store datasources that should be available to all middleware.
 typedef ApiClientHandler =
     Future<APIClientResponse> Function(APIClientRequest request, Map<String, Object?> context);
 
@@ -75,6 +78,8 @@ final class APIClientResponse {
   final bool persistentConnection;
 
   final APIClientRequest request;
+
+  bool get success => successStatusCodes.contains(statusCode);
 }
 
 /// {@template api_client}
@@ -120,11 +125,16 @@ class ApiClient /* with http_package.BaseClient implements http_package.Client *
     required ApiClientHandler handler,
     required String method,
     required Uri url,
+    required Map<String, String?>? queryParameters,
     required Map<String, String>? headers,
     required Map<String, Object?>? body,
     required Map<String, Object?> context,
   }) {
-    final request = http_package.Request(method, url)..maxRedirects = 5;
+    final finalUrl = queryParameters == null
+        ? url
+        : url.replace(queryParameters: {...url.queryParameters, ...queryParameters});
+
+    final request = http_package.Request(method, finalUrl)..maxRedirects = 5;
     request.headers['Accept'] = 'application/json';
     if (headers != null) request.headers.addAll(headers);
     if (body != null) {
@@ -134,17 +144,23 @@ class ApiClient /* with http_package.BaseClient implements http_package.Client *
         ..['Content-Type'] = 'application/json; charset=UTF-8'
         ..['Content-Length'] = contentLength.toString();
       request
-        ..contentLength = contentLength
-        ..bodyBytes = bytes;
+              // ..contentLength = contentLength
+              .bodyBytes =
+          bytes;
     }
     return handler(APIClientRequest(request), context);
   }
 
   /// Sends a GET request to the given [path].
-  Future<APIClientResponse> get(String path, {Map<String, String>? headers}) => _sendUnstreamed(
+  Future<APIClientResponse> get(
+    String path, {
+    Map<String, String?>? queryParameters,
+    Map<String, String>? headers,
+  }) => _sendUnstreamed(
     handler: _handler,
     method: 'GET',
     url: _mergePath(_baseUrl, path),
+    queryParameters: queryParameters,
     headers: headers,
     body: null,
     context: <String, Object?>{},
@@ -154,24 +170,65 @@ class ApiClient /* with http_package.BaseClient implements http_package.Client *
   Future<APIClientResponse> post(
     String path, {
     Map<String, String>? headers,
+    Map<String, String?>? queryParameters,
     Map<String, Object?>? body,
-  }) => _sendUnstreamed(
-    handler: _handler,
-    method: 'POST',
-    url: _mergePath(_baseUrl, path),
-    headers: headers,
-    body: body,
-    context: <String, Object?>{},
-  );
+    Duration timeout = const Duration(seconds: 30),
+  }) =>
+      _sendUnstreamed(
+        handler: _handler,
+        method: 'POST',
+        url: _mergePath(_baseUrl, path),
+        queryParameters: queryParameters,
+        headers: headers,
+        body: body,
+        context: <String, Object?>{},
+      ).timeout(
+        timeout,
+        onTimeout: () => throw APIClientException$Network(
+          code: 'timeout_error',
+          message: 'Request timed out after ${timeout.inSeconds} seconds.',
+          statusCode: 0,
+          error: TimeoutException('Request timeout'),
+          data: null,
+        ),
+      );
+
+  Future<APIClientResponse> patch(
+    String path, {
+    Map<String, String>? headers,
+    Map<String, String?>? queryParameters,
+    Map<String, Object?>? body,
+    Duration timeout = const Duration(seconds: 30),
+  }) =>
+      _sendUnstreamed(
+        handler: _handler,
+        method: 'PATCH',
+        url: _mergePath(_baseUrl, path),
+        queryParameters: queryParameters,
+        headers: headers,
+        body: body,
+        context: <String, Object?>{},
+      ).timeout(
+        timeout,
+        onTimeout: () => throw APIClientException$Network(
+          code: 'timeout_error',
+          message: 'Request timed out after ${timeout.inSeconds} seconds.',
+          statusCode: 0,
+          error: TimeoutException('Request timeout'),
+          data: null,
+        ),
+      );
 
   Future<APIClientResponse> put(
     String path, {
     Map<String, String>? headers,
+    Map<String, String?>? queryParameters,
     Map<String, Object?>? body,
   }) => _sendUnstreamed(
     handler: _handler,
     method: 'PUT',
     url: _mergePath(_baseUrl, path),
+    queryParameters: queryParameters,
     headers: headers,
     body: body,
     context: <String, Object?>{},
@@ -180,11 +237,13 @@ class ApiClient /* with http_package.BaseClient implements http_package.Client *
   Future<APIClientResponse> delete(
     String path, {
     Map<String, String>? headers,
+    Map<String, String?>? queryParameters,
     Map<String, Object?>? body,
   }) => _sendUnstreamed(
     handler: _handler,
     method: 'DELETE',
     url: _mergePath(_baseUrl, path),
+    queryParameters: queryParameters,
     headers: headers,
     body: body,
     context: <String, Object?>{},
@@ -269,21 +328,16 @@ ApiClientHandler _createHandler(
                 data: null,
               );
             case > 399:
-              throw APIClientException$Client(
-                code: 'bad_request_error',
-                message: 'Bad request.',
-                statusCode: statusCode,
-                error: null,
-                data: null,
-              );
+              l
+                ..e('---Incorrect server error')
+                ..e('---Server statusCode: ${streamedResponse.statusCode}')
+                ..e('---Reason: ${streamedResponse.reasonPhrase}');
+              break;
             case > 299:
-              throw APIClientException$Client(
-                code: 'redirection_error',
-                message: 'Request was redirected.',
-                statusCode: statusCode,
-                error: null,
-                data: null,
-              );
+              l
+                ..e('---Incorrect server error')
+                ..e('---Server statusCode: ${streamedResponse.statusCode}')
+                ..e('---Reason: ${streamedResponse.reasonPhrase}');
             default:
               break;
           }
@@ -297,25 +351,14 @@ ApiClientHandler _createHandler(
         Uint8List bytes;
         try {
           contentLength = streamedResponse.contentLength ?? 0;
-          if (contentLength > 0) {
-            final contentType = streamedResponse.headers['content-type']?.toLowerCase() ?? '';
-            if (!contentType.contains('application/json')) {
-              throwError(
-                completer,
-                APIClientException$Client(
-                  code: 'invalid_content_type_error',
-                  message: 'Response content type is not application/json.',
-                  statusCode: statusCode,
-                  error: null,
-                  data: null,
-                ),
-                StackTrace.current,
-              );
-              return;
-            }
-            bytes = await streamedResponse.stream.toBytes();
-          } else {
-            bytes = Uint8List(0);
+
+          // Always try to read the stream, regardless of contentLength
+          // The server might not provide Content-Length header
+          bytes = await streamedResponse.stream.toBytes();
+
+          // If we got bytes but contentLength was 0, update it
+          if (contentLength == 0 && bytes.isNotEmpty) {
+            contentLength = bytes.length;
           }
         } on Object catch (error, stackTrace) {
           throwError(
@@ -335,6 +378,30 @@ ApiClientHandler _createHandler(
         // Decode the response.
         APIClientResponse response;
         try {
+          // Only check content-type if we have actual content
+          if (bytes.isNotEmpty) {
+            final contentType = streamedResponse.headers['content-type']?.toLowerCase() ?? '';
+            if (!contentType.contains('application/json')) {
+              // Log the actual content for debugging
+              l
+                ..w('Received non-JSON response: $contentType')
+                ..w('Body: ${utf8.decode(bytes)}');
+
+              throwError(
+                completer,
+                APIClientException$Client(
+                  code: 'invalid_content_type_error',
+                  message: 'Response content type is not application/json.',
+                  statusCode: statusCode,
+                  error: null,
+                  data: bytes,
+                ),
+                StackTrace.current,
+              );
+              return;
+            }
+          }
+
           final body = bytes.isEmpty ? <String, Object?>{} : jsonDecoder.convert(bytes);
           response = APIClientResponse.json(
             body,
@@ -345,6 +412,14 @@ ApiClientHandler _createHandler(
             request: request,
           );
         } on Object catch (error, stackTrace) {
+          // Log the actual bytes for debugging
+          l.e('Failed to decode response: $error');
+          try {
+            l.e('Response body: ${utf8.decode(bytes)}');
+          } on Object catch (_) {
+            l.e('Could not decode bytes as UTF-8');
+          }
+
           throwError(
             completer,
             APIClientException$Client(
@@ -391,7 +466,7 @@ sealed class APIClientException implements Exception {
   /// The source error object.
   abstract final Object? error;
 
-  /// Additional data.
+  /// Additional datasources.
   abstract final Object? data;
 
   @override

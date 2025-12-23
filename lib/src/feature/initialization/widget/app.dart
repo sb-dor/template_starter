@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_project/src/common/constant/config.dart';
 import 'package:flutter_project/src/common/localization/localization.dart';
 import 'package:flutter_project/src/common/router/router_state_mixin.dart';
+import 'package:flutter_project/src/common/util/performance_overlay_tool.dart';
 import 'package:flutter_project/src/common/widget/window_scope.dart';
 import 'package:flutter_project/src/feature/authentication/widget/authentication_scope.dart';
 import 'package:octopus/octopus.dart';
@@ -22,10 +23,22 @@ class App extends StatefulWidget {
 class _AppState extends State<App> with RouterStateMixin {
   final Key builderKey = GlobalKey(); // Disable recreate widget tree
 
+  String _buildBannerMessage() {
+    if (Config.environment.isProduction) {
+      if (Config.alpha) return 'ALPHA';
+      if (Config.beta) return 'BETA';
+      return '';
+    }
+
+    if (Config.environment.isDevelopment) return 'DEBUG';
+
+    return '';
+  }
+
   @override
   Widget build(BuildContext context) => MaterialApp.router(
-    title: 'Application',
-    debugShowCheckedModeBanner: !Config.environment.isProduction,
+    title: 'Avera Web',
+    debugShowCheckedModeBanner: false,
 
     // Router
     routerConfig: router.config,
@@ -42,7 +55,7 @@ class _AppState extends State<App> with RouterStateMixin {
     /* locale: SettingsScope.localOf(context), */
 
     // Theme
-    /* theme: SettingsScope.themeOf(context), */
+    // theme: SettingsScope.themeOf(context),
     theme: ThemeData.dark(),
 
     // Scopes
@@ -54,7 +67,14 @@ class _AppState extends State<App> with RouterStateMixin {
         child: OctopusTools(
           enable: !kReleaseMode,
           octopus: router,
-          child: AuthenticationScope(child: child ?? const SizedBox.shrink()),
+          child: PerformanceOverlayTool(
+            enabled: true,
+            child: Banner(
+              location: BannerLocation.topEnd,
+              message: _buildBannerMessage(),
+              child: AuthenticationScope(child: child ?? const SizedBox.shrink()),
+            ),
+          ),
         ),
       ),
     ),

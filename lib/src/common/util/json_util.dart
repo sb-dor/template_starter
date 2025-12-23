@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_classes_with_only_static_members
+import 'dart:convert' as converter;
 
 /// Utility class for working with JSON.
 sealed class JsonUtil {
@@ -25,6 +26,9 @@ sealed class JsonUtil {
         int value => DateTime.fromMillisecondsSinceEpoch(value * 1000),
         _ => null,
       };
+
+  static Map<String, Object?>? jsonDecode(String source) =>
+      converter.jsonDecode(source) as Map<String, Object?>?;
 }
 
 extension JsonUtilX on Map<String, Object?> {

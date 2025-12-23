@@ -10,6 +10,10 @@ abstract final class Config {
     const String.fromEnvironment('ENVIRONMENT', defaultValue: 'development'),
   );
 
+  static const bool alpha = bool.fromEnvironment('ALPHA', defaultValue: false);
+
+  static const bool beta = bool.fromEnvironment('BETA', defaultValue: false);
+
   // --- API --- //
 
   /// Base url for api.
@@ -26,7 +30,7 @@ abstract final class Config {
     milliseconds: int.fromEnvironment('API_CONNECT_TIMEOUT', defaultValue: 15000),
   );
 
-  /// Timeout in milliseconds for receiving data from url.
+  /// Timeout in milliseconds for receiving datasources from url.
   /// [Dio] will throw the [DioException] with [DioExceptionType.receiveTimeout] type when time out.
   /// e.g. 10000
   static const Duration apiReceiveTimeout = Duration(
@@ -34,7 +38,7 @@ abstract final class Config {
   );
 
   /// Cache lifetime.
-  /// Refetch data from url when cache is expired.
+  /// Refetch datasources from url when cache is expired.
   /// e.g. 1 hour
   static const Duration cacheLifetime = Duration(hours: 1);
 
@@ -57,7 +61,7 @@ abstract final class Config {
 
   /// Minimum length of password.
   /// e.g. 8
-  static const int passwordMinLength = int.fromEnvironment('PASSWORD_MIN_LENGTH', defaultValue: 8);
+  static const int passwordMinLength = int.fromEnvironment('PASSWORD_MIN_LENGTH', defaultValue: 6);
 
   /// Maximum length of password.
   /// e.g. 32
