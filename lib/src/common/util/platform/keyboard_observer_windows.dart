@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_project/src/common/model/virtual_key_codes.dart';
 import 'package:flutter_project/src/common/util/platform/keyboard_observer_interface.dart';
 import 'package:meta/meta.dart';
@@ -8,6 +9,18 @@ IKeyboardObserver $getKeyboardObserver$Windows() => _KeyboardObserver$Windows();
 
 @sealed
 class _KeyboardObserver$Windows with _IsKeyPressed, ChangeNotifier implements IKeyboardObserver {
+  _KeyboardObserver$Windows() {
+    HardwareKeyboard.instance.addHandler(_onKey);
+  }
+
+  bool _onKey(KeyEvent event) {
+    if (event is KeyDownEvent) {
+      notifyListeners();
+    }
+    return false;
+  }
+
+
   @override
   bool get isControlPressed => isKeyPressed(VK.LCONTROL) || isKeyPressed(VK.RCONTROL);
 

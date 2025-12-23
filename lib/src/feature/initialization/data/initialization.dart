@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_project/src/common/util/error_util.dart';
+import 'package:flutter_project/src/common/util/error_util/error_util.dart';
 import 'package:flutter_project/src/feature/initialization/data/initialize_dependencies.dart';
 /* import 'package:database/database.dart'; */
 import 'package:flutter_project/src/feature/initialization/models/dependencies.dart';

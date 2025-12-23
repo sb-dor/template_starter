@@ -10,6 +10,7 @@ import 'package:flutter_project/src/common/database/tables/log_table.dart';
 import 'package:flutter_project/src/common/model/app_metadata.dart';
 import 'package:flutter_project/src/common/util/api_client.dart';
 import 'package:flutter_project/src/common/util/log_buffer.dart';
+import 'package:flutter_project/src/common/util/middleware/authentication_interceptor.dart';
 import 'package:flutter_project/src/common/util/middleware/logger_mw.dart';
 import 'package:flutter_project/src/common/util/screen_util.dart';
 import 'package:flutter_project/src/feature/authentication/controller/authentication_controller.dart';
@@ -80,6 +81,11 @@ final Map<String, _InitializationStep> _initializationSteps = <String, _Initiali
     baseUrl: Config.apiBaseUrl,
     middlewares: [
       //
+      AuthenticationInterceptor(
+        authenticationHeaders: AuthenticationHeaders(
+          sharedPreferences: dependencies.sharedPreferences,
+        ),
+      ).call,
       const ApiClient$LoggerMiddleware(logRequest: false, logResponse: true, logError: true).call,
       // dedupe interceptor
       // authentification interceptor

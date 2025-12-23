@@ -11,6 +11,17 @@ IKeyboardObserver $getKeyboardObserver() =>
 
 @sealed
 class _KeyboardObserver$VM with _IsKeyPressed$IO, ChangeNotifier implements IKeyboardObserver {
+  _KeyboardObserver$VM() {
+    HardwareKeyboard.instance.addHandler(_onKey);
+  }
+
+  bool _onKey(KeyEvent event) {
+    if (event is KeyDownEvent) {
+      notifyListeners();
+    }
+    return false;
+  }
+
   @override
   bool get isControlPressed =>
       isKeyPressed(LogicalKeyboardKey.controlLeft) || isKeyPressed(LogicalKeyboardKey.controlRight);
