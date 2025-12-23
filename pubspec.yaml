@@ -57,7 +57,7 @@ dependencies:
   octopus: ^0.0.9
 
   # Annotation
-  meta: any
+  meta: 1.17.0
   json_annotation: ^4.9.0
 
   # Utility
